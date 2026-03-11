@@ -76,7 +76,7 @@ const props = defineProps({
 .about-me-title {
   font-size: 1.1rem;
   font-weight: 500;
-  color: var(--betclic-red, #E30613);
+  color: var(--betclic-red, #E10014);
   margin: 0;
 }
 
@@ -116,7 +116,7 @@ const props = defineProps({
   position: absolute;
   inset: -12px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--betclic-red, #E30613) 0%, var(--betclic-yellow, #FFD200) 100%);
+  background: linear-gradient(135deg, var(--betclic-red, #E10014) 0%, var(--betclic-yellow, #FFCC00) 100%);
   z-index: 0;
   opacity: 0.15;
 }
@@ -126,9 +126,9 @@ const props = defineProps({
   height: 260px;
   border-radius: 50%;
   object-fit: cover;
-  border: 5px solid var(--betclic-red, #E30613);
+  border: 5px solid var(--betclic-red, #E10014);
   position: relative;
   z-index: 1;
-  box-shadow: 0 8px 32px rgba(227, 6, 19, 0.2);
+  box-shadow: 0 8px 32px rgba(225, 0, 20, 0.2);
 }
 </style>

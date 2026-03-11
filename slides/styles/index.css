@@ -1,17 +1,17 @@
 /* ============================================================
    Betclic Theme for Slidev
-   Brand colors: Magma Red #E30613, Yellow #FFD200, White #FFFFFF
+   Brand colors: Magma Red #E10014, Yellow #FFCC00, White #FFFFFF
    ============================================================ */
 
 /* ---- Fonts ---- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-  --betclic-red: #E30613;
-  --betclic-red-dark: #B8050F;
-  --betclic-red-light: #FF2033;
-  --betclic-yellow: #FFD200;
-  --betclic-black: #0F0F0F;
+  --betclic-red: #E10014;
+  --betclic-red-dark: #B40010;
+  --betclic-red-light: #FF2032;
+  --betclic-yellow: #FFCC00;
+  --betclic-black: #000000;
   --betclic-dark: #1A1A1A;
   --betclic-gray: #6B7280;
   --betclic-light-gray: #F3F4F6;
@@ -20,7 +20,7 @@
   --slidev-theme-primary: var(--betclic-red);
   --slidev-theme-background: var(--betclic-white);
   --slidev-theme-foreground: var(--betclic-dark);
-  --slidev-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --slidev-font-sans: 'Roboto', system-ui, -apple-system, sans-serif;
 }
 
 /* ---- Base ---- */
@@ -180,7 +180,7 @@
   right: 100px;
   width: 200px;
   height: 200px;
-  background: rgba(255, 210, 0, 0.15);
+  background: rgba(255, 204, 0, 0.15);
   border-radius: 50%;
 }
 
