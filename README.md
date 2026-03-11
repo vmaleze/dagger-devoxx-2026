@@ -12,42 +12,9 @@ Dans ce Tools in Action, on part du terrain : démos live, exemples concrets et 
 
 | Speaker | Role |
 |---------|------|
-| **Vivien Maleze** | Staff Engineer @ Betclic |
-| **Rodrigo** | Engineer @ Betclic |
-
-## Structure
-
-| Section | Speaker | Duration |
-|---------|---------|----------|
-| Comment on a fait chez Betclic — Golden Path + modules et nos problèmes (passer à l'échelle) | Vivien | ~5 min |
-| Montage des volumes | Vivien | ~3 min |
-| TestContainers | Rodrigo | ~3 min |
-| Organisation des modules | Rodrigo | ~3 min |
-| Rapport de tests | Rodrigo | ~3 min |
-| Gestion du streamlining | Vivien | ~3 min |
-| Comment simplifier les commandes Dagger à rallonge | Vivien | ~3 min |
+| **Vivien Maleze** | Platform Engineer @ Ippon Technologies |
+| **Rodrigo** | Staff Software Engineer @ Betclic |
 
 ## Slides
 
-The presentation slides are built with [Slidev](https://sli.dev/) and available on [GitHub Pages](https://vmaleze.github.io/dagger-devoxx-2026/).
-
-### Run locally
-
-```bash
-cd slides
-npm install
-npm run dev
-```
-
-### Build
-
-```bash
-cd slides
-npm run build
-```
-
-## Resources
-
-- [Dagger](https://dagger.io/)
-- [Slidev](https://sli.dev/)
-- [DevoxxFR 2026](https://www.devoxx.fr/)
+The presentation slides are available on [GitHub Pages](https://vmaleze.github.io/dagger-devoxx-2026/).
