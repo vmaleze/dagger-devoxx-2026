@@ -1,0 +1,360 @@
+/* ============================================================
+   Betclic Theme for Slidev
+   Brand colors: Magma Red #E30613, Yellow #FFD200, White #FFFFFF
+   ============================================================ */
+
+/* ---- Fonts ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --betclic-red: #E30613;
+  --betclic-red-dark: #B8050F;
+  --betclic-red-light: #FF2033;
+  --betclic-yellow: #FFD200;
+  --betclic-black: #0F0F0F;
+  --betclic-dark: #1A1A1A;
+  --betclic-gray: #6B7280;
+  --betclic-light-gray: #F3F4F6;
+  --betclic-white: #FFFFFF;
+
+  --slidev-theme-primary: var(--betclic-red);
+  --slidev-theme-background: var(--betclic-white);
+  --slidev-theme-foreground: var(--betclic-dark);
+  --slidev-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ---- Base ---- */
+.slidev-layout {
+  font-family: var(--slidev-font-sans);
+  background: var(--betclic-white);
+  color: var(--betclic-dark);
+}
+
+/* ============================================================
+   COVER SLIDE
+   ============================================================ */
+.slidev-layout.cover-slide {
+  background: var(--betclic-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.slidev-layout.cover-slide::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 100%;
+  background: var(--betclic-red);
+}
+
+.slidev-layout.cover-slide::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 340px;
+  height: 340px;
+  background: var(--betclic-red);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  opacity: 0.06;
+}
+
+.cover-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-left: 32px;
+  position: relative;
+  z-index: 1;
+}
+
+.cover-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--betclic-red);
+  border-left: 3px solid var(--betclic-yellow);
+  padding-left: 10px;
+  margin-bottom: 8px;
+}
+
+.cover-title {
+  font-size: 3.8rem !important;
+  font-weight: 900 !important;
+  line-height: 1.05 !important;
+  color: var(--betclic-dark) !important;
+  margin: 0 !important;
+  letter-spacing: -0.02em;
+}
+
+.cover-subtitle {
+  font-size: 1.4rem !important;
+  font-weight: 400 !important;
+  color: var(--betclic-gray) !important;
+  margin: 0 !important;
+  margin-top: 4px !important;
+}
+
+.cover-speakers {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--betclic-dark);
+  margin-top: 8px;
+}
+
+.cover-speakers .separator {
+  color: var(--betclic-red);
+  font-weight: 400;
+}
+
+.cover-logo {
+  width: 120px !important;
+  margin-top: 32px;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ============================================================
+   DEFAULT LAYOUT — top red bar
+   ============================================================ */
+.slidev-layout.default h1,
+.slidev-layout.two-cols h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--betclic-dark);
+  border-bottom: 3px solid var(--betclic-red);
+  padding-bottom: 10px;
+  margin-bottom: 24px;
+}
+
+.slidev-layout h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--betclic-red);
+  margin-bottom: 12px;
+}
+
+.slidev-layout h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--betclic-dark);
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   SECTION LAYOUT
+   ============================================================ */
+.slidev-layout.section {
+  background: var(--betclic-red) !important;
+  color: var(--betclic-white) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.slidev-layout.section::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+}
+
+.slidev-layout.section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  right: 100px;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 210, 0, 0.15);
+  border-radius: 50%;
+}
+
+.slidev-layout.section h1 {
+  font-size: 3.2rem !important;
+  font-weight: 900 !important;
+  color: var(--betclic-white) !important;
+  border-bottom: none !important;
+  margin-bottom: 12px !important;
+  line-height: 1.1;
+}
+
+.slidev-layout.section h2 {
+  font-size: 1.4rem !important;
+  font-weight: 400 !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  margin-bottom: 0 !important;
+}
+
+.speaker-tag {
+  display: inline-block;
+  margin-top: 20px;
+  background: var(--betclic-yellow);
+  color: var(--betclic-dark);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 4px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   ABOUT-ME LAYOUT
+   ============================================================ */
+.slidev-layout.about-me {
+  background: var(--betclic-white);
+  position: relative;
+  overflow: hidden;
+}
+
+.slidev-layout.about-me::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--betclic-red) 60%, var(--betclic-yellow) 100%);
+}
+
+/* ============================================================
+   CUSTOM COMPONENTS
+   ============================================================ */
+
+/* Two column layout helper */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 16px;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: var(--betclic-light-gray);
+  border-left: 4px solid var(--betclic-red);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  font-size: 1.05rem;
+}
+
+/* Problems grid */
+.problems-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.problem-card {
+  background: var(--betclic-white);
+  border: 1px solid #E5E7EB;
+  border-top: 3px solid var(--betclic-red);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.problem-icon {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.problem-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--betclic-dark);
+  margin-bottom: 6px;
+}
+
+.problem-card p {
+  font-size: 0.9rem;
+  color: var(--betclic-gray);
+  margin: 0;
+}
+
+/* Lists */
+.slidev-layout ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.slidev-layout ul li {
+  padding: 6px 0 6px 20px;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.slidev-layout ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background: var(--betclic-red);
+  border-radius: 50%;
+}
+
+/* End slide */
+.end-cta {
+  margin: 24px auto;
+  font-size: 1.2rem;
+  color: var(--betclic-gray);
+}
+
+.social-links {
+  margin-top: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--betclic-dark);
+}
+
+.end-logo {
+  width: 100px;
+  margin: 24px auto 0;
+  display: block;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* ============================================================
+   NAVIGATION BAR — Betclic accent
+   ============================================================ */
+.slidev-nav-bar {
+  border-top: 2px solid var(--betclic-red) !important;
+}
+
+/* Code blocks */
+.slidev-layout pre {
+  background: var(--betclic-black) !important;
+  border-radius: 8px;
+  border-left: 3px solid var(--betclic-red);
+}
+
+/* Blockquote — placeholder style */
+.slidev-layout blockquote {
+  border-left: 4px solid var(--betclic-yellow);
+  background: var(--betclic-light-gray);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  color: var(--betclic-gray);
+  font-style: italic;
+  margin: 24px 0;
+}
