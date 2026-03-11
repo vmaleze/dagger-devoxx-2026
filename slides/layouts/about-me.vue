@@ -1,134 +1,114 @@
 <script setup>
 const props = defineProps({
-  speakerName: {
-    type: String,
-    required: true,
-  },
-  speakerTitle: {
-    type: String,
-    required: true,
-  },
-  speakerImage: {
-    type: String,
-    required: true,
-  },
-  speakerCompanyLogo: {
-    type: String,
-    required: true,
-  },
+  speakerName: { type: String, required: true },
+  speakerTitle: { type: String, required: true },
+  speakerImage: { type: String, required: true },
+  speakerCompanyLogo: { type: String, required: true },
 })
+
+// Dynamic :src bindings are not processed by Vite's asset pipeline,
+// so we must manually prepend the base URL for GitHub Pages deployments.
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+const resolvedImage = base + props.speakerImage
+const resolvedLogo = base + props.speakerCompanyLogo
 </script>
 
 <template>
   <div class="slidev-layout about-me">
-    <div class="about-me-inner">
-      <!-- Left: info -->
-      <div class="about-me-info">
-        <h1 class="about-me-name">{{ props.speakerName }}</h1>
-        <p class="about-me-title">{{ props.speakerTitle }}</p>
-        <ul class="about-me-details">
-          <slot name="details" />
-        </ul>
-        <img :src="props.speakerCompanyLogo" class="about-me-company-logo" />
-      </div>
 
-      <!-- Right: photo -->
-      <div class="about-me-photo-wrap">
-        <img
-          :src="props.speakerImage"
-          class="about-me-photo"
-          :alt="props.speakerName"
-        />
-        <!-- decorative red arc behind photo -->
-        <div class="about-me-photo-bg" />
+    <!-- Dragon Ball background -->
+    <img src="/images/speaker.jpeg" class="absolute left-7/10 top-0 bottom-0 right-0 w-2/5 object-cover object-center">
+
+    <!-- Profile picture -->
+    <img
+      :src="resolvedImage"
+      class="absolute rounded-full object-cover z-10"
+      style="width: 280px; height: 280px; top: 50%; left: 48%; transform: translateY(-50%); border: 5px solid var(--betclic-red); box-shadow: 0 8px 32px rgba(225, 0, 20, 0.2);"
+    />
+
+    <!-- Bio -->
+    <div class="bio">
+      <h1>{{ props.speakerName }}</h1>
+      <p class="title">{{ props.speakerTitle }}</p>
+      <div class="details">
+        <slot name="details" />
       </div>
+      <img :src="resolvedLogo" class="logo">
     </div>
+
   </div>
 </template>
 
-<style scoped>
-.about-me-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  padding: 48px 64px;
-  gap: 40px;
-}
-
-.about-me-info {
+<style>
+/* ---- Bio container ---- */
+.about-me .bio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 38%;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  flex: 1;
+  justify-content: center;
+  gap: 14px;
+  padding: 32px 24px 32px 40px;
 }
 
-.about-me-name {
+.about-me .bio h1 {
   font-size: 2.8rem;
   font-weight: 900;
-  color: var(--betclic-dark, #1A1A1A);
+  color: var(--betclic-dark);
   line-height: 1.1;
   margin: 0;
-  border-bottom: none !important;
-  padding-bottom: 0 !important;
+  white-space: nowrap;
 }
 
-.about-me-title {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--betclic-red, #E10014);
+.about-me .bio .title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--betclic-red);
   margin: 0;
 }
 
-.about-me-details {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0 0;
+.about-me .bio .logo {
+  width: 110px;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* ---- Details list ---- */
+.about-me .details ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
-.about-me-details :slotted(li) {
-  font-size: 0.95rem;
-  color: var(--betclic-dark, #1A1A1A);
-  padding-left: 0;
+.about-me .details ul li {
+  font-size: 1rem;
+  color: var(--betclic-dark);
+  line-height: 1.4;
+  padding: 0;
 }
 
-.about-me-details :slotted(li)::before {
-  display: none;
+.about-me .details ul li::before {
+  content: none;
 }
 
-.about-me-company-logo {
-  width: 130px;
-  margin-top: 20px;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+.about-me .details ul li::marker {
+  color: var(--betclic-red);
 }
 
-/* Photo section */
-.about-me-photo-wrap {
-  position: relative;
-  flex-shrink: 0;
+/* nested list */
+.about-me .details ul ul {
+  padding-left: 14px;
+  margin-top: 2px;
+  list-style: circle;
 }
 
-.about-me-photo-bg {
-  position: absolute;
-  inset: -12px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--betclic-red, #E10014) 0%, var(--betclic-yellow, #FFCC00) 100%);
-  z-index: 0;
-  opacity: 0.15;
-}
-
-.about-me-photo {
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 5px solid var(--betclic-red, #E10014);
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 8px 32px rgba(225, 0, 20, 0.2);
+.about-me .details ul ul li::marker {
+  color: var(--betclic-gray);
 }
 </style>

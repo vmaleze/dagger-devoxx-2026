@@ -26,19 +26,25 @@ class: cover-slide
 </div>
 
 ---
+title: About Vivien
 layout: about-me
-speakerName: "Vivien Maleze"
-speakerTitle: "Staff Engineer @ Betclic"
-speakerImage: /images/vivien.jpg
-speakerCompanyLogo: /images/betclic-logo.svg
+hideInToc: true
+speakerName: Vivien MALEZE
+speakerTitle: Platform Engineer
+speakerImage: /images/vivien-speaker.jpeg
+speakerCompanyLogo: /images/ippon.png
 ---
 
-<template #details>
-  <li>🏢 Staff Engineer chez Betclic depuis 4 ans</li>
-  <li>🔧 Plateforme & Developer Experience</li>
-  <li>🐳 Fan de Docker depuis les débuts</li>
-  <li>🦅 Aventurier du Golden Path</li>
-</template>
+::details::
+
+* Background java <logos-java />
+* +12 ans d'xp
+* +7 ans chez Ippon
+* Bordeaux, France 🇫🇷
+* Sujets du moment
+  * Developer Experience <logos-kubernetes />
+  * Platform Engineering 🛠️
+* <logos-twitter /> <logos-github-octocat /> @vmaleze
 
 ---
 layout: about-me

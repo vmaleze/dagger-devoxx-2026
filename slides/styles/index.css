@@ -221,6 +221,7 @@
   background: var(--betclic-white);
   position: relative;
   overflow: hidden;
+  padding: 0 !important;
 }
 
 .slidev-layout.about-me::before {
@@ -231,6 +232,7 @@
   right: 0;
   height: 5px;
   background: linear-gradient(90deg, var(--betclic-red) 60%, var(--betclic-yellow) 100%);
+  z-index: 20;
 }
 
 /* ============================================================
