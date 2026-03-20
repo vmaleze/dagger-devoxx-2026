@@ -48,17 +48,17 @@ speakerCompanyLogo: /images/ippon.png
 
 ---
 layout: about-me
-speakerName: "Rodrigo"
-speakerTitle: "Engineer @ Betclic"
+speakerName: "Rodrigo GARCIA DE OLIVEIRA"
+speakerTitle: "Staff Engineer @ Betclic"
 speakerImage: /images/rodrigo.jpg
 speakerCompanyLogo: /images/betclic-logo.svg
 ---
 
 <template #details>
-  <li>🏢 Engineer chez Betclic</li>
-  <li>⚙️ CI/CD & Infrastructure</li>
-  <li>🧪 Passionné de testing</li>
-  <li>🚀 Dagger adopter de la première heure</li>
+  <li>🏢 Staff Engineer — DevX chez Betclic depuis 2 ans</li>
+  <li><logos-github-actions /> Mise en place de la plateforme CI/CD GitHub Actions + Dagger</li>
+  <li>📊 Déploiement des métriques DORA</li>
+  <li><img src="/images/dagger.png" style="display:inline;height:1.2em;vertical-align:middle;margin-right:0.3em;" /> Adopteur de Dagger de la première heure</li>
 </template>
 
 ---
