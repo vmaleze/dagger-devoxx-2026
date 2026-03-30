@@ -258,7 +258,48 @@ layout: section
 
 # Organisation des modules
 
-> Placez votre contenu ici
+<div class="highlight-box">
+  Migration massive <strong>Jenkins → GitHub Actions</strong> — fournir des modules <em>clé en main</em> pour migrer rapidement sans se soucier des détails d'implémentation.
+</div>
+
+<br/>
+
+<div class="two-col">
+<div>
+
+### Modules par stack technique
+
+<table style="font-size:0.8rem; width:100%">
+  <thead>
+    <tr><th>Stack</th><th>build</th><th>test</th><th>lint</th><th>sonar</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><logos-kotlin /></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td><logos-python /> Python</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td><logos-javascript /> JS</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td><logos-rust /> Rust</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+    <tr><td><logos-dotnet /> .NET</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+  </tbody>
+</table>
+
+</div>
+<div>
+
+### Modules transverses
+
+- 🐳 **Docker Build** — construction & publication d'images
+- 🏷️ **Versioning** — gestion sémantique des versions
+
+### Ce que chaque module garantit
+
+- Cache optimisé out-of-the-box
+- Ressources adaptées à la charge
+- Intégration transparente avec SonarQube et TestContainers
+
+</div>
+</div>
+
+<div class="speaker-tag">Rodrigo</div>
 
 ---
 layout: section
