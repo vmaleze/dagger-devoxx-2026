@@ -112,6 +112,46 @@ layout: section
 - **Caching** natif : plus de "works on my machine"
 
 ---
+layout: default
+---
+
+# Architecture Dagger chez Betclic
+
+<div class="architecture-diagram">
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     GitHub Actions Runners                   │
+│                                                             │
+│   Runner A          Runner B          Runner C              │
+│  ┌────────┐        ┌────────┐        ┌────────┐            │
+│  │ dagger │        │ dagger │        │ dagger │            │
+│  │  CLI   │        │  CLI   │        │  CLI   │            │
+│  └───┬────┘        └───┬────┘        └───┬────┘            │
+│      │                 │                 │                  │
+│      └─────────────────┼─────────────────┘                 │
+│                        │                                    │
+│              ┌─────────▼──────────┐                        │
+│              │   Dagger Engine    │                        │
+│              │    (mutualisé)     │                        │
+│              │                   │                         │
+│              │  ┌─────────────┐  │                         │
+│              │  │   Cache     │  │                         │
+│              │  │  partagé    │  │                         │
+│              │  └─────────────┘  │                         │
+│              └───────────────────┘                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+</div>
+
+- **Un seul moteur Dagger** partagé entre tous les runners
+- **Cache mutualisé** : le build d'un runner profite à tous les suivants
+- **Réduction drastique** des temps de CI sur les pipelines répétitifs
+
+<div class="speaker-tag">Rodrigo</div>
+
+---
 
 # Nos problèmes — Passer à l'échelle
 
