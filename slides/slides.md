@@ -208,7 +208,41 @@ layout: section
 
 # TestContainers avec Dagger
 
-> Placez votre contenu ici
+<div class="two-col">
+<div>
+
+**V1 — Module daggerverse**
+
+- [`vito/daggerverse/testcontainers`](https://daggerverse.dev/mod/github.com/vito/daggerverse/testcontainers@edb98345c16e14ac7529fd103c4ce3f8dcab54f5) — Docker DinD as a service
+- Zéro modification côté dev : local = CI
+- ✅ Simple à mettre en place
+
+**Le problème**
+
+- Docker démarré à chaque exécution → **images non cachées**
+- Images lourdes (Localstack, Mongo...)
+- Tests parallélisés en groupes → **N téléchargements simultanés**
+- Résultat : saturation des **IOP disque** du Dagger Engine
+
+</div>
+<div>
+
+**V2 — Notre module custom**
+
+- CI → **Docker host externe** au Dagger Engine
+- Local → **TCP Docker daemon** local
+- Fallback → DinD service (comportement V1)
+
+<br/>
+
+- Images partagées, **téléchargées une seule fois**
+- Cache Docker préservé entre les runs
+- Toujours transparent pour les devs
+
+</div>
+</div>
+
+<div class="speaker-tag">Rodrigo</div>
 
 ---
 layout: section
