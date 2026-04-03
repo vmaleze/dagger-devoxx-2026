@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="Run the Kotlin Hello World app"
+
+cd kotlin-app
+./gradlew run

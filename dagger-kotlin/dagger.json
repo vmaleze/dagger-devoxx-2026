@@ -1,0 +1,14 @@
+{
+  "name": "dagger-kotlin",
+  "engineVersion": "v0.20.3",
+  "sdk": {
+    "source": "python"
+  },
+  "dependencies": [
+    {
+      "name": "testcontainers-config",
+      "source": "github.com/betclicgroup/betclic-dagger-testcontainers-config@v1.0.9",
+      "pin": "35b2c819946c72d5b548ee2228db4225e8226d7d"
+    }
+  ]
+}

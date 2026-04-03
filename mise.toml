@@ -1,0 +1,8 @@
+[tools]
+java = "25.0.2"
+dagger = "0.20.3"
+
+[task_config]
+includes = [
+    ".mise/tasks"
+]
