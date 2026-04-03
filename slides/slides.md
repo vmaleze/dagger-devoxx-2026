@@ -120,65 +120,168 @@ layout: default
 
 # Architecture Dagger chez Betclic
 
-<div class="architecture-diagram">
+<div class="two-col arch-slide">
+<div>
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     GitHub Actions Runners                   │
-│                                                             │
-│   Runner A          Runner B          Runner C              │
-│  ┌────────┐        ┌────────┐        ┌────────┐            │
-│  │ dagger │        │ dagger │        │ dagger │            │
-│  │  CLI   │        │  CLI   │        │  CLI   │            │
-│  └───┬────┘        └───┬────┘        └───┬────┘            │
-│      │                 │                 │                  │
-│      └─────────────────┼─────────────────┘                 │
-│                        │                                    │
-│              ┌─────────▼──────────┐                        │
-│              │   Dagger Engine    │                        │
-│              │    (mutualisé)     │                        │
-│              │                   │                         │
-│              │  ┌─────────────┐  │                         │
-│              │  │   Cache     │  │                         │
-│              │  │  partagé    │  │                         │
-│              │  └─────────────┘  │                         │
-│              └───────────────────┘                         │
-└─────────────────────────────────────────────────────────────┘
-```
-
+<div class="arch-v2">
+  <div class="arch-v2-group">
+    <div class="arch-v2-group-label">🏃 GitHub Actions Runners</div>
+    <div class="arch-v2-runners">
+      <div class="arch-v2-runner">
+        <div class="arch-v2-rname">Runner A</div>
+        <div class="arch-v2-rtag">Dagger CLI</div>
+      </div>
+      <div class="arch-v2-runner">
+        <div class="arch-v2-rname">Runner B</div>
+        <div class="arch-v2-rtag">Dagger CLI</div>
+      </div>
+      <div class="arch-v2-runner">
+        <div class="arch-v2-rname">Runner C</div>
+        <div class="arch-v2-rtag">Dagger CLI</div>
+      </div>
+    </div>
+  </div>
+  <svg class="arch-v2-svg" viewBox="0 0 300 52" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <line x1="50"  y1="0" x2="50"  y2="22" stroke="#CBD5E1" stroke-width="2"/>
+    <line x1="150" y1="0" x2="150" y2="22" stroke="#CBD5E1" stroke-width="2"/>
+    <line x1="250" y1="0" x2="250" y2="22" stroke="#CBD5E1" stroke-width="2"/>
+    <line x1="50"  y1="22" x2="250" y2="22" stroke="#CBD5E1" stroke-width="2"/>
+    <line x1="150" y1="22" x2="150" y2="34" stroke="#CBD5E1" stroke-width="2"/>
+    <polygon points="143,31 157,31 150,42" fill="#CBD5E1"/>
+  </svg>
+  <div class="arch-v2-engine">
+    <div class="arch-v2-ename">⚙️ Dagger Engine</div>
+    <div class="arch-v2-esub">- Partagé entre tous les runners -</div>
+    <div class="arch-v2-cache">💾 Cache partagé</div>
+  </div>
 </div>
 
-- **Un seul moteur Dagger** partagé entre tous les runners
-- **Cache mutualisé** : le build d'un runner profite à tous les suivants
-- **Réduction drastique** des temps de CI sur les pipelines répétitifs
-
-<div class="speaker-tag">Rodrigo</div>
+</div>
+<div class="arch-key-points">
+  <div>🔌 Un seul moteur pour tous les runners</div>
+  <div>💾 Cache mutualisé entre pipelines</div>
+  <div>⚡ Réduction drastique du temps de CI</div>
+</div>
+</div>
 
 ---
 
 # Nos problèmes — Passer à l'échelle
 
-<div class="problems-grid">
-  <div class="problem-card">
-    <div class="problem-icon">💣</div>
-    <div class="problem-title">Explosion des modules</div>
-    <p>Des dizaines de modules sans convention ni gouvernance</p>
+<div class="problems-flow">
+  <div class="pf-item">
+    <div class="pf-num">01</div>
+    <div class="pf-icon">💣</div>
+    <div class="pf-title">Explosion des modules</div>
+    <div class="pf-desc">Dizaines de modules sans convention ni gouvernance</div>
   </div>
-  <div class="problem-card">
-    <div class="problem-icon">🐢</div>
-    <div class="problem-title">Performances</div>
-    <p>Montage de volumes, caches mal gérés, pipelines lents</p>
+  <div class="pf-arrow">→</div>
+  <div class="pf-item">
+    <div class="pf-num">02</div>
+    <div class="pf-icon">🐢</div>
+    <div class="pf-title">Performances</div>
+    <div class="pf-desc">Caches mal gérés, montages de volumes, pipelines lents</div>
   </div>
-  <div class="problem-card">
-    <div class="problem-icon">😵</div>
-    <div class="problem-title">DX dégradée</div>
-    <p>Commandes à rallonge, rapports inexploitables</p>
+  <div class="pf-arrow">→</div>
+  <div class="pf-item">
+    <div class="pf-num">03</div>
+    <div class="pf-icon">😵</div>
+    <div class="pf-title">DX dégradée</div>
+    <div class="pf-desc">Commandes à rallonge, rapports inexploitables</div>
   </div>
-  <div class="problem-card">
-    <div class="problem-icon">🔒</div>
-    <div class="problem-title">Streamlining</div>
-    <p>Difficile de forcer les bonnes pratiques à l'échelle</p>
+  <div class="pf-arrow">→</div>
+  <div class="pf-item">
+    <div class="pf-num">04</div>
+    <div class="pf-icon">🔒</div>
+    <div class="pf-title">Streamlining</div>
+    <div class="pf-desc">Impossible de forcer les bonnes pratiques à l'échelle</div>
   </div>
+</div>
+
+---
+layout: section
+---
+
+# Organisation des modules
+
+## Gouvernance & conventions
+
+<div class="speaker-tag">Rodrigo</div>
+
+---
+
+# Organisation des modules — contexte
+
+<div class="context-panels">
+  <div class="context-panel problem">
+    <div class="context-panel-header">⚠️ Le problème</div>
+    <ul>
+      <li>Des dizaines d'équipes, des stacks différentes</li>
+      <li>Chaque équipe <strong>réécrit sa CI</strong> à sa façon</li>
+      <li>Pas de standardisation, pas de gouvernance</li>
+      <li>Migration Jenkins → GHA à absorber</li>
+    </ul>
+  </div>
+  <div class="context-panel solution">
+    <div class="context-panel-header">✅ La réponse</div>
+    <p>Un module <strong>clé en main par stack</strong>, maintenu par l'équipe DevX.</p>
+    <p>Les devs <em>pluggent le module</em> — pipeline complet, rien à configurer.</p>
+  </div>
+</div>
+
+
+---
+
+# Les modules par stack
+
+<div class="module-grid">
+  <div class="module-card mc-kotlin">
+    <div class="mc-logo"><logos-kotlin /></div>
+    <div class="mc-name">JVM / Kotlin</div>
+    <div class="mc-caps">
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+    </div>
+  </div>
+  <div class="module-card mc-python">
+    <div class="mc-logo"><logos-python /></div>
+    <div class="mc-name">Python</div>
+    <div class="mc-caps">
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+    </div>
+  </div>
+  <div class="module-card mc-js">
+    <div class="mc-logo"><logos-javascript /></div>
+    <div class="mc-name">JavaScript</div>
+    <div class="mc-caps">
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+    </div>
+  </div>
+  <div class="module-card mc-rust">
+    <div class="mc-logo"><logos-rust /></div>
+    <div class="mc-name">Rust</div>
+    <div class="mc-caps">
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+    </div>
+  </div>
+  <div class="module-card mc-dotnet">
+    <div class="mc-logo"><logos-dotnet /></div>
+    <div class="mc-name">.NET</div>
+    <div class="mc-caps">
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+    </div>
+  </div>
+</div>
+
+<div class="module-transverse">
+  <div class="mt-card">🐳 <strong>Docker Build</strong> — construction & publication d'images</div>
+  <div class="mt-card">🏷️ <strong>Versioning</strong> — gestion sémantique des versions</div>
+</div>
+
+<div class="module-guarantees">
+  <span>✅ Cache optimisé</span>
+  <span>✅ Ressources adaptées</span>
+  <span>✅ SonarQube intégré</span>
+  <span>✅ TestContainers ready</span>
 </div>
 
 ---
@@ -432,98 +535,39 @@ layout: section
 
 # TestContainers avec Dagger
 
-<div class="two-col">
-<div>
-
-**V1 — Module daggerverse**
-
-- [`vito/daggerverse/testcontainers`](https://daggerverse.dev/mod/github.com/vito/daggerverse/testcontainers@edb98345c16e14ac7529fd103c4ce3f8dcab54f5) — Docker DinD as a service
-- Zéro modification côté dev : local = CI
-- ✅ Simple à mettre en place
-
-**Le problème**
-
-- Docker démarré à chaque exécution → **images non cachées**
-- Images lourdes (Localstack, Mongo...)
-- Tests parallélisés en groupes → **N téléchargements simultanés**
-- Résultat : saturation des **IOP disque** du Dagger Engine
-
+<div class="tc-evolution">
+  <div class="tc-panel tc-v1">
+    <div class="tc-badge">V1</div>
+    <div class="tc-panel-title">Module daggerverse</div>
+    <ul>
+      <li>Docker DinD as a service</li>
+      <li>Local = CI, zéro config</li>
+      <li>Facile à mettre en place</li>
+    </ul>
+  </div>
+  <div class="tc-arrow">→</div>
+  <div class="tc-panel tc-problem">
+    <div class="tc-badge">⚠️</div>
+    <div class="tc-panel-title">Le problème</div>
+    <ul>
+      <li>Docker redémarre → <strong>pas de cache</strong></li>
+      <li>Images lourdes (Localstack…)</li>
+      <li>Tests parallèles → <strong>N pulls simultanés</strong></li>
+      <li><strong>Saturation IOP</strong> du Dagger Engine</li>
+    </ul>
+  </div>
+  <div class="tc-arrow">→</div>
+  <div class="tc-panel tc-v2">
+    <div class="tc-badge">V2</div>
+    <div class="tc-panel-title">Notre module custom</div>
+    <ul>
+      <li>CI → <strong>Docker host externe</strong></li>
+      <li>Local → TCP daemon local</li>
+      <li>Images <strong>partagées entre runs</strong></li>
+      <li>Toujours transparent pour les devs</li>
+    </ul>
+  </div>
 </div>
-<div>
-
-**V2 — Notre module custom**
-
-- CI → **Docker host externe** au Dagger Engine
-- Local → **TCP Docker daemon** local
-- Fallback → DinD service (comportement V1)
-
-<br/>
-
-- Images partagées, **téléchargées une seule fois**
-- Cache Docker préservé entre les runs
-- Toujours transparent pour les devs
-
-</div>
-</div>
-
-<div class="speaker-tag">Rodrigo</div>
-
----
-layout: section
----
-
-# Organisation des modules
-
-## Gouvernance & conventions
-
-<div class="speaker-tag">Rodrigo</div>
-
----
-
-# Organisation des modules
-
-<div class="highlight-box">
-  Migration massive <strong>Jenkins → GitHub Actions</strong> — fournir des modules <em>clé en main</em> pour migrer rapidement sans se soucier des détails d'implémentation.
-</div>
-
-<br/>
-
-<div class="two-col">
-<div>
-
-### Modules par stack technique
-
-<table style="font-size:0.8rem; width:100%">
-  <thead>
-    <tr><th>Stack</th><th>build</th><th>test</th><th>lint</th><th>sonar</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><logos-kotlin /></td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-    <tr><td><logos-python /> Python</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-    <tr><td><logos-javascript /> JS</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-    <tr><td><logos-rust /> Rust</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-    <tr><td><logos-dotnet /> .NET</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
-  </tbody>
-</table>
-
-</div>
-<div>
-
-### Modules transverses
-
-- 🐳 **Docker Build** — construction & publication d'images
-- 🏷️ **Versioning** — gestion sémantique des versions
-
-### Ce que chaque module garantit
-
-- Cache optimisé out-of-the-box
-- Ressources adaptées à la charge
-- Intégration transparente avec SonarQube et TestContainers
-
-</div>
-</div>
-
-<div class="speaker-tag">Rodrigo</div>
 
 ---
 layout: section
@@ -545,22 +589,6 @@ layout: section
 layout: section
 ---
 
-# Gestion du streamlining
-
-## Forcer les bonnes pratiques
-
-<div class="speaker-tag">Vivien</div>
-
----
-
-# Gestion du streamlining
-
-> Placez votre contenu ici
-
----
-layout: section
----
-
 # Simplifier les commandes Dagger
 
 ## Arrêtez de taper des romans dans votre terminal
@@ -571,8 +599,139 @@ layout: section
 
 # Simplifier les commandes Dagger
 
-> Placez votre contenu ici
+<div class="two-col" style="gap:20px">
+<div>
 
+**Avant — appel Dagger direct**
+
+```bash
+dagger --command '
+  test_results=$(
+    git@github.com:betclic-dagger-dotnet@"$VER"
+      --dotnet-version="$DOTNET_VERSION"
+    | with-test-containers-auth
+    | with-sonar --project-name="$NAME"
+    | test --source=.
+  )
+  $test_results | result | export
+  .exit $($test_results | exit-code)
+'
+```
+
+</div>
+<div>
+
+**Après — mise comme interface**
+
+```bash
+mise run dotnet:ci:test \
+  --build-version ${BUILD_VERSION} \
+  --with-sonar
+```
+
+<div class="mise-win">
+  <span>✅ Pas de syntaxe Dagger à connaître</span>
+  <span>✅ Pas d'env vars de versions</span>
+  <span>✅ Dagger réduit à un détail d'implémentation</span>
+</div>
+
+</div>
+</div>
+
+---
+layout: section
+---
+
+# Gestion du streamlining
+
+## Forcer les bonnes pratiques
+
+<div class="speaker-tag">Vivien</div>
+
+---
+
+# Versions sans friction
+
+<div class="streamline-flow">
+  <div class="sf-step">
+    <div class="sf-icon">👩‍💻</div>
+    <div class="sf-label"><code>mise run jvm:ci:test</code></div>
+  </div>
+  <div class="sf-arrow">→</div>
+  <div class="sf-step sf-highlight">
+    <div class="sf-icon">🔍</div>
+    <div class="sf-label"><strong>betclic-action-tools-version</strong><br/><small>résout les versions pour le domaine</small></div>
+  </div>
+  <div class="sf-arrow">→</div>
+  <div class="sf-step">
+    <div class="sf-icon">⚙️</div>
+    <div class="sf-label">Dagger appelé<br/><small>avec la bonne version du module</small></div>
+  </div>
+  <div class="sf-arrow">→</div>
+  <div class="sf-step sf-ok">
+    <div class="sf-icon">✅</div>
+    <div class="sf-label">Résultat<br/><small>local = CI, toujours</small></div>
+  </div>
+</div>
+
+<div class="streamline-note">
+  Aucune env var à gérer, aucune version à pinner manuellement.<br/>
+  <strong>betclic-action-tools-version</strong> est embarqué dans chaque tâche mise — invisible pour le développeur.
+</div>
+
+---
+
+# Rollouts progressifs
+
+<div class="two-col" style="gap:24px">
+<div>
+
+### Priorité de résolution
+
+<div class="rollout-track">
+  <div class="rt-row rt-pinned">
+    <div class="rt-label">📌 <strong>Pinné</strong></div>
+    <div class="rt-desc">Version forcée dans <code>mise.toml</code> — contrôle total</div>
+  </div>
+  <div class="rt-row rt-early">
+    <div class="rt-label">✨ <strong>Early adopter</strong></div>
+    <div class="rt-desc">Flag opt-in — reçoit la nouvelle version en avance</div>
+  </div>
+  <div class="rt-row rt-domain">
+    <div class="rt-label">🚀 <strong>Rollout par domaine</strong></div>
+    <div class="rt-desc">DevX déploie domaine par domaine, progressivement</div>
+  </div>
+  <div class="rt-row rt-stable">
+    <div class="rt-label">📦 <strong>Stable</strong></div>
+    <div class="rt-desc">Version courante validée — défaut pour tous</div>
+  </div>
+</div>
+
+</div>
+<div>
+
+### Nouvelle version de Dagger
+
+```
+DevX publie Dagger 0.20 + modules compatibles
+          ↓
+Tests de validation automatiques
+          ↓
+Rollout domaine par domaine
+  → devx      ✅ migré
+  → payments  ✅ migré
+  → betting   ⏳ en attente
+          ↓
+Passage en stable — tous les autres migrent
+```
+
+<div class="mise-win" style="margin-top:10px">
+  <span>✅ Zéro PR de mise à jour</span>
+  <span>✅ Rollback immédiat si problème</span>
+</div>
+
+</div>
+</div>
 ---
 layout: center
 class: text-center
