@@ -1,6 +1,9 @@
 ---
 theme: default
 colorSchema: light
+highlighter: shiki
+shikiConfig:
+  theme: github-light
 title: "Dagger à l'échelle"
 titleTemplate: "%s - DevoxxFR 2026"
 favicon: /images/betclic-logo.svg
@@ -190,9 +193,230 @@ layout: section
 
 ---
 
-# Montage des volumes
+# Montage des volumes — Pourquoi & Comment ?
 
-> Placez votre contenu ici
+<div class="highlight-box">
+  Dagger exécute chaque step dans des conteneurs <strong>éphémères</strong>.<br/>
+  Sans cache monté : les dépendances sont <strong>re-téléchargées à chaque run</strong>.
+</div>
+
+<br/>
+
+<div class="two-col">
+<div>
+
+### ❌ Sans `with_mounted_cache`
+
+| Run | Durée | Pourquoi |
+|-----|-------|----------|
+| #1 | ~8 min | Télécharge 400Mo de deps |
+| #2 | ~8 min | Re-télécharge tout |
+| #3 | ~8 min | Et encore... |
+
+</div>
+<div>
+
+### ✅ Avec `with_mounted_cache`
+
+| Run | Durée | Pourquoi |
+|-----|-------|----------|
+| #1 | ~8 min | Premier run, mise en cache |
+| #2 | ~2 min | Cache hit ✓ |
+| #3 | ~2 min | Cache hit ✓ |
+
+</div>
+</div>
+
+---
+layout: default
+---
+
+# Les deux niveaux de cache Dagger
+
+<div class="cache-diagram">
+  <div class="cache-column layer-col">
+    <div class="cache-col-header layer">Layer Cache (BuildKit)</div>
+    <div class="cache-col-badge layer">Automatique</div>
+    <div class="cache-row">🔑 Hash des opérations</div>
+    <div class="cache-row">❄️ Immutable</div>
+    <div class="cache-row">📦 Image layers</div>
+    <div class="cache-row">⚡ Container ops</div>
+    <div class="cache-col-note">Invalidé si <em>n'importe quel input</em> change en amont</div>
+  </div>
+  <div class="cache-vs-divider">⚡</div>
+  <div class="cache-column volume-col">
+    <div class="cache-col-header volume">Cache Volumes</div>
+    <div class="cache-col-badge volume">with_mounted_cache</div>
+    <div class="cache-row volume-row">📦 gradle-cache → /root/.gradle</div>
+    <div class="cache-row volume-row">🔨 build-cache-{project} → /app/build-cache</div>
+    <div class="cache-row volume-row">🧶 yarn-cache → /root/.yarn</div>
+    <div class="cache-row volume-row">📦 npm-cache → /root/.npm</div>
+    <div class="cache-col-note">💾 Mutable · Nommé · Persiste entre les runs</div>
+  </div>
+</div>
+
+---
+
+# L'ordre des opérations
+
+<div class="trap-badge">⚠️ Le piège</div>
+
+<div class="code-compare-grid">
+  <div class="code-compare-block bad-block">
+    <div class="code-compare-label bad-label">❌ Source avant le cache — miss à chaque commit</div>
+
+```python
+container
+  .with_directory("/app", source)        # ← invalide tout ce qui suit
+  .with_mounted_cache("/root/.gradle", …)
+  .with_exec(["gradle", "build"])
+```
+
+  </div>
+  <div class="code-compare-block good-block">
+    <div class="code-compare-label good-label">✅ Cache avant le source — hit garanti</div>
+
+```python
+container
+  .with_mounted_cache(                   # ← layer stable
+      "/root/.gradle",
+      dag.cache_volume("gradle-cache"),
+      sharing=CacheSharingMode.PRIVATE,
+  )
+  .with_directory("/app", source)
+  .with_exec(["gradle", "build"])
+```
+
+  </div>
+</div>
+
+<div class="trap-insight">
+  💡 BuildKit invalide tous les layers en aval d'un changement. Le cache doit être défini <em>avant</em> la source.
+</div>
+
+---
+
+# `CacheSharingMode` — accès concurrent au cache
+
+<div class="tl-demo">
+
+  <div class="tl-panel bad">
+    <div class="tl-panel-title">SHARED <small style="font-weight:400;font-size:0.75em">(défaut)</small></div>
+    <div class="tl-panel-desc">Accès concurrent R/W — plusieurs instances écrivent en même temps dans le même volume.</div>
+    <div class="tl-traces">
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 1</div>
+        <div class="tl-track"><div class="tl-span bad-span" style="left:0%;width:55%"></div></div>
+      </div>
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 2</div>
+        <div class="tl-track"><div class="tl-span bad-span" style="left:20%;width:55%"></div></div>
+      </div>
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 3</div>
+        <div class="tl-track"><div class="tl-span bad-span" style="left:40%;width:55%"></div></div>
+      </div>
+    </div>
+    <div class="tl-axis"><span>0s</span><span>5s</span><span>10s</span></div>
+    <div class="tl-panel-verdict">⚠️ Cache corrompu</div>
+  </div>
+
+  <div class="tl-panel warn">
+    <div class="tl-panel-title">LOCKED</div>
+    <div class="tl-panel-desc">Accès exclusif au volume — les pipelines 2 et 3 attendent que le verrou soit libéré.</div>
+    <div class="tl-traces">
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 1</div>
+        <div class="tl-track"><div class="tl-span warn-span" style="left:0%;width:33%"></div></div>
+      </div>
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 2</div>
+        <div class="tl-track">
+          <div class="tl-span wait-span" style="left:0%;width:33%"></div>
+          <div class="tl-span warn-span" style="left:33%;width:33%"></div>
+        </div>
+      </div>
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 3</div>
+        <div class="tl-track">
+          <div class="tl-span wait-span" style="left:0%;width:66%"></div>
+          <div class="tl-span warn-span" style="left:66%;width:34%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="tl-axis"><span>0s</span><span>8s</span><span>15s</span></div>
+    <div class="tl-panel-verdict">🐢 3× plus lent</div>
+  </div>
+
+  <div class="tl-panel good">
+    <div class="tl-panel-title">PRIVATE</div>
+    <div class="tl-panel-desc">Copie isolée par container — chaque pipeline a son propre volume, pas de contention.</div>
+    <div class="tl-traces">
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 1</div>
+        <div class="tl-track"><div class="tl-span good-span" style="left:0%;width:55%"></div></div>
+      </div>
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 2</div>
+        <div class="tl-track"><div class="tl-span good-span" style="left:0%;width:55%"></div></div>
+      </div>
+      <div class="tl-span-row">
+        <div class="tl-service">Pipeline 3</div>
+        <div class="tl-track"><div class="tl-span good-span" style="left:0%;width:55%"></div></div>
+      </div>
+    </div>
+    <div class="tl-axis"><span>0s</span><span>3s</span><span>5s</span></div>
+    <div class="tl-panel-verdict">✅ Rapide & isolé</div>
+  </div>
+
+</div>
+
+---
+
+# Quoi cacher — et comment ?
+
+<table class="cache-safety-table">
+  <thead>
+    <tr>
+      <th>Chemin</th>
+      <th>Contenu</th>
+      <th>Concurrent ?</th>
+      <th>Mode</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>/root/.m2/repository</code></td>
+      <td>JARs Maven</td>
+      <td>✅ Read-only après download</td>
+      <td><span class="safe-badge ok">SHARED</span></td>
+    </tr>
+    <tr>
+      <td><code>/root/.npm</code> · <code>/root/.yarn</code></td>
+      <td>Packages JS</td>
+      <td>✅ Read-only après download</td>
+      <td><span class="safe-badge ok">SHARED</span></td>
+    </tr>
+    <tr class="row-mixed">
+      <td><code>/root/.gradle</code> <em>(entier)</em></td>
+      <td>Deps + daemon + locks</td>
+      <td>⚠️ Daemon écrit en continu</td>
+      <td><span class="safe-badge warn">PRIVATE</span></td>
+    </tr>
+    <tr class="row-danger">
+      <td><code>/app/build-cache</code></td>
+      <td>Artefacts compilés Gradle</td>
+      <td>❌ Écrit par chaque build</td>
+      <td><span class="safe-badge bad">PRIVATE obligatoire</span></td>
+    </tr>
+    <tr class="row-danger">
+      <td><code>/root/.gradle/daemon</code></td>
+      <td>Verrous daemon</td>
+      <td>❌ Accès exclusif</td>
+      <td><span class="safe-badge bad">Ne pas cacher</span></td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 layout: section
