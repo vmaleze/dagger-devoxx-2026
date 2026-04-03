@@ -581,9 +581,98 @@ layout: section
 
 ---
 
-# Rapport de tests
+# Rapport de tests — Le problème
 
-> Placez votre contenu ici
+<div class="highlight-box">
+  Par défaut, si des tests échouent, Dagger <strong>arrête l'exécution immédiatement</strong>.<br/>
+  Les rapports de tests ne peuvent pas être exportés — la CI n'affiche rien.
+</div>
+
+<br/>
+
+<div class="code-compare-grid">
+<div class="code-compare-block bad-block">
+<div class="code-compare-label bad-label">❌ Comportement par défaut — rapport perdu</div>
+
+```python
+container = container.with_exec(gradlew_command)
+# Si des tests échouent → exception levée
+# → export jamais atteint
+await container
+  .directory("build/test-results")
+  .export("./test-results")
+```
+
+</div>
+<div class="code-compare-block good-block">
+<div class="code-compare-label good-label">✅ Avec ReturnType.ANY — exécution continue</div>
+
+```python
+# expect=ReturnType.ANY : l'échec ne stoppe plus Dagger
+container = container.with_exec(
+    gradlew_command,
+    expect=ReturnType.ANY
+)
+
+# Objet custom : rapports + code de sortie
+return TestResult(
+    result=container.directory("build/test-results"),
+    exit_code=container.exit_code()
+)
+```
+
+</div>
+</div>
+
+<div class="trap-insight">
+  ⚠️ Problème : récupérer les rapports <strong>et</strong> le code de sortie nécessite <strong>deux appels Dagger distincts</strong> — deux connexions au engine.
+</div>
+
+---
+
+# Rapport de tests — Dagger Shell
+
+<div class="highlight-box">
+  <strong>Dagger Shell</strong> permet d'enchaîner plusieurs opérations en <strong>une seule connexion</strong> au Dagger Engine.
+</div>
+
+<br/>
+
+<div class="code-compare-grid">
+<div class="code-compare-block bad-block">
+<div class="code-compare-label bad-label">❌ Deux appels = deux connexions</div>
+
+```bash
+# Connexion 1 — export des rapports
+dagger call test --source . result \
+  export --path ./test-results
+
+# Connexion 2 — récupération du code de sortie
+dagger call test --source . exit-code
+```
+
+</div>
+<div class="code-compare-block good-block">
+<div class="code-compare-label good-label">✅ Dagger Shell — une seule connexion</div>
+
+```bash
+dagger --command '
+  test_results=$(
+    git@github.com:betclicgroup/betclic-dagger-jvm \
+    | test --source="."
+  )
+  $test_results | result | export \
+    --path="./build/test-results"
+  .exit $($test_results | exit-code)
+'
+```
+
+</div>
+</div>
+
+<div class="trap-insight">
+  ⚡ Une seule connexion au Dagger Engine — les deux opérations partagent le même contexte d'exécution et le cache.
+</div>
 
 ---
 layout: section
