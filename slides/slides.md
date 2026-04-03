@@ -592,32 +592,28 @@ layout: section
 
 <div class="code-compare-grid">
 <div class="code-compare-block bad-block">
-<div class="code-compare-label bad-label">❌ Comportement par défaut — rapport perdu</div>
+<div class="code-compare-label bad-label">❌ Par défaut — pipeline stoppé, rapport perdu</div>
 
 ```python
-container = container.with_exec(gradlew_command)
-# Si des tests échouent → exception levée
+# Si des tests échouent → exception levée immédiatement
+container = container.with_exec(["./gradlew", "test"])
 # → export jamais atteint
-await container
-  .directory("build/test-results")
-  .export("./test-results")
 ```
 
 </div>
 <div class="code-compare-block good-block">
-<div class="code-compare-label good-label">✅ Avec ReturnType.ANY — exécution continue</div>
+<div class="code-compare-label good-label">✅ ReturnType.ANY + objet TestResult</div>
 
 ```python
-# expect=ReturnType.ANY : l'échec ne stoppe plus Dagger
+# L'exécution continue même si les tests échouent
 container = container.with_exec(
-    gradlew_command,
+    ["./gradlew", "test"],
     expect=ReturnType.ANY
 )
-
-# Objet custom : rapports + code de sortie
+exit_code = await container.exit_code()
 return TestResult(
-    result=container.directory("build/test-results"),
-    exit_code=container.exit_code()
+    _container=container,
+    _exit_code=exit_code
 )
 ```
 
@@ -633,7 +629,7 @@ return TestResult(
 # Rapport de tests — Dagger Shell
 
 <div class="highlight-box">
-  <strong>Dagger Shell</strong> permet d'enchaîner plusieurs opérations en <strong>une seule connexion</strong> au Dagger Engine.
+  <strong>Dagger Shell</strong> enchaîne plusieurs opérations en <strong>une seule connexion</strong> au engine — export des résultats <em>et</em> propagation du code de sortie.
 </div>
 
 <br/>
@@ -643,27 +639,25 @@ return TestResult(
 <div class="code-compare-label bad-label">❌ Deux appels = deux connexions</div>
 
 ```bash
-# Connexion 1 — export des rapports
-dagger call test --source . result \
-  export --path ./test-results
+dagger -m dagger-kotlin call test \
+  --source ./kotlin-app \
+  result export --path ./build/test-results
 
-# Connexion 2 — récupération du code de sortie
-dagger call test --source . exit-code
+dagger -m dagger-kotlin call test \
+  --source ./kotlin-app exit-code
 ```
 
 </div>
 <div class="code-compare-block good-block">
-<div class="code-compare-label good-label">✅ Dagger Shell — une seule connexion</div>
+<div class="code-compare-label good-label">✅ Dagger Shell via mise — une connexion</div>
 
 ```bash
-dagger --command '
-  test_results=$(
-    git@github.com:betclicgroup/betclic-dagger-jvm \
-    | test --source="."
-  )
+# .mise/tasks/ci/test
+dagger --progress=dots -m ./dagger-kotlin --command '
+  test_results=$( . | test --source=../kotlin-app )
   $test_results | result | export \
-    --path="./build/test-results"
-  .exit $($test_results | exit-code)
+    --path=./build/test-results
+  .exit $( $test_results | exit-code )
 '
 ```
 
@@ -671,7 +665,7 @@ dagger --command '
 </div>
 
 <div class="trap-insight">
-  ⚡ Une seule connexion au Dagger Engine — les deux opérations partagent le même contexte d'exécution et le cache.
+  ⚡ <code>.exit</code> est un builtin Dagger Shell — il propage le code de sortie pour faire échouer la CI si les tests échouent, même après l'export des rapports.
 </div>
 
 ---

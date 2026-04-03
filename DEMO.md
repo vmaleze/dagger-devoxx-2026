@@ -204,13 +204,47 @@ dagger -m dagger-kotlin call test --source ./kotlin-app exit-code
 
 ---
 
-## Step 5 — Wrap in a mise task
+## Step 5 — Dagger Shell: one connection, two operations
+
+> **Concept**: Calling `dagger call` twice (once for the report, once for the exit code)
+> opens two separate connections to the Dagger Engine. Even if both are mostly cached,
+> the connection overhead adds up. Dagger Shell lets you do both in a single session.
+
+Show the two-call problem first:
+
+```bash
+# Connection 1 — export reports
+dagger -m dagger-kotlin call test --source ./kotlin-app \
+  result export --path ./build/test-results
+
+# Connection 2 — get exit code
+dagger -m dagger-kotlin call test --source ./kotlin-app exit-code
+```
+
+Now switch to Dagger Shell directly:
+
+```bash
+dagger --progress=dots -m ./dagger-kotlin --command '
+  test_results=$( . | test --source=../kotlin-app )
+  $test_results | result | export --path=./build/test-results
+  .exit $( $test_results | exit-code )
+'
+```
+
+Key points to explain:
+- `$( . | test … )` — runs the test function, stores the lazy `TestResult` handle
+- `$test_results | result | export` — pulls the report directory out
+- `.exit` — Dagger Shell builtin that sets the process exit code **after** the export
+
+---
+
+## Step 6 — Wrap in a mise task
 
 > **Concept**: The Dagger command is powerful but verbose.
 > `mise` acts as the developer-facing interface — nobody needs to know Dagger internals.
 > The same command works locally and in GitHub Actions unchanged.
 
-Fill in `.mise/tasks/ci/test`:
+Fill in `.mise/tasks/ci/test` (same Dagger Shell command, now behind a simple `mise run`):
 
 ```bash
 #!/usr/bin/env bash
