@@ -611,6 +611,7 @@ layout: section
 # Si des tests échouent → exception levée immédiatement
 container = container.with_exec(["./gradlew", "test"])
 # → export jamais atteint
+return container
 ```
 
 </div>
@@ -662,12 +663,11 @@ dagger -m dagger-kotlin call test \
 
 </div>
 <div class="code-compare-block good-block">
-<div class="code-compare-label good-label">✅ Dagger Shell via mise — une connexion</div>
+<div class="code-compare-label good-label">✅ Dagger Shell — une connexion</div>
 
 ```bash
-# .mise/tasks/ci/test
 dagger --progress=dots -m ./dagger-kotlin --command '
-  test_results=$( . | test --source=../kotlin-app )
+  test_results=$( test --source=../kotlin-app )
   $test_results | result | export \
     --path=./build/test-results
   .exit $( $test_results | exit-code )
