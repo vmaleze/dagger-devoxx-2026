@@ -271,12 +271,12 @@ layout: section
   </div>
 </div>
 
-<div class="module-transverse">
+<div v-click class="module-transverse">
   <div class="mt-card">🐳 <strong>Docker Build</strong> — construction & publication d'images</div>
   <div class="mt-card">🏷️ <strong>Versioning</strong> — gestion sémantique des versions</div>
 </div>
 
-<div class="module-guarantees">
+<div v-click class="module-guarantees">
   <span>✅ Cache optimisé</span>
   <span>✅ Ressources adaptées</span>
   <span>✅ SonarQube intégré</span>
