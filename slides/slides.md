@@ -542,8 +542,8 @@ layout: section
       <li>Facile à mettre en place</li>
     </ul>
   </div>
-  <div class="tc-arrow">→</div>
-  <div class="tc-panel tc-problem">
+  <div v-click="1" class="tc-arrow">→</div>
+  <div v-click="1" class="tc-panel tc-problem">
     <div class="tc-badge">⚠️</div>
     <div class="tc-panel-title">Le problème</div>
     <ul>
@@ -553,8 +553,8 @@ layout: section
       <li><strong>Saturation IOP</strong> du Dagger Engine</li>
     </ul>
   </div>
-  <div class="tc-arrow">→</div>
-  <div class="tc-panel tc-v2">
+  <div v-click="2" class="tc-arrow">→</div>
+  <div v-click="2" class="tc-panel tc-v2">
     <div class="tc-badge">V2</div>
     <div class="tc-panel-title">Notre module custom</div>
     <ul>
