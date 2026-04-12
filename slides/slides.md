@@ -221,7 +221,7 @@ layout: section
       <li>Migration Jenkins → GHA à absorber</li>
     </ul>
   </div>
-  <div class="context-panel solution">
+  <div v-click class="context-panel solution">
     <div class="context-panel-header">✅ La réponse</div>
     <p>Un module <strong>clé en main par stack</strong>, maintenu par l'équipe DevX.</p>
     <p>Les devs <em>pluggent le module</em> — pipeline complet, rien à configurer.</p>
