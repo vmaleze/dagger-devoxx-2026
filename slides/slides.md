@@ -238,35 +238,35 @@ layout: section
     <div class="mc-logo"><logos-kotlin /></div>
     <div class="mc-name">JVM / Kotlin</div>
     <div class="mc-caps">
-      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span>
     </div>
   </div>
   <div class="module-card mc-python">
     <div class="mc-logo"><logos-python /></div>
     <div class="mc-name">Python</div>
     <div class="mc-caps">
-      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span>
     </div>
   </div>
   <div class="module-card mc-js">
     <div class="mc-logo"><logos-javascript /></div>
     <div class="mc-name">JavaScript</div>
     <div class="mc-caps">
-      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span>
     </div>
   </div>
   <div class="module-card mc-rust">
     <div class="mc-logo"><logos-rust /></div>
     <div class="mc-name">Rust</div>
     <div class="mc-caps">
-      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span>
     </div>
   </div>
   <div class="module-card mc-dotnet">
     <div class="mc-logo"><logos-dotnet /></div>
     <div class="mc-name">.NET</div>
     <div class="mc-caps">
-      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span><span class="mc-cap">sonar</span>
+      <span class="mc-cap">build</span><span class="mc-cap">test</span><span class="mc-cap">lint</span>
     </div>
   </div>
 </div>
