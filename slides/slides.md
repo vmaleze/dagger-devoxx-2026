@@ -532,38 +532,55 @@ layout: section
 
 # TestContainers avec Dagger
 
-<div class="tc-evolution">
-  <div class="tc-panel tc-v1">
-    <div class="tc-badge">V1</div>
-    <div class="tc-panel-title">Module daggerverse</div>
-    <ul>
-      <li>Docker DinD as a service</li>
-      <li>Local = CI, zéro config</li>
-      <li>Facile à mettre en place</li>
-    </ul>
+<div class="tc-arch-grid">
+
+  <div class="tc-arch-col">
+    <div class="tc-arch-label v1">V1 — Module daggerverse</div>
+    <div class="tc-arch-diagram v1">
+      <div class="tc-arch-box tc-arch-cli">🖥️ Dagger CLI</div>
+      <div class="tc-arch-connector">↓</div>
+      <div class="tc-arch-box tc-arch-engine">
+        ⚙️ Dagger Engine
+        <div class="tc-arch-engine-inner">
+          <div class="tc-arch-dind">
+            <div class="tc-arch-dind-title">🐳 Docker DinD (service)</div>
+            <div class="tc-arch-containers">
+              <span class="tc-arch-container">mongo</span>
+              <span class="tc-arch-container">localstack</span>
+              <span class="tc-arch-container">postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-click="1" class="tc-arch-problem-note">
+      ⚠️ Docker redémarre à chaque run → <strong>images non cachées</strong><br/>
+      Tests parallèles → <strong>N pulls simultanés</strong> → saturation IOP
+    </div>
   </div>
-  <div v-click="1" class="tc-arrow">→</div>
-  <div v-click="1" class="tc-panel tc-problem">
-    <div class="tc-badge">⚠️</div>
-    <div class="tc-panel-title">Le problème</div>
-    <ul>
-      <li>Docker redémarre → <strong>pas de cache</strong></li>
-      <li>Images lourdes (Localstack…)</li>
-      <li>Tests parallèles → <strong>N pulls simultanés</strong></li>
-      <li><strong>Saturation IOP</strong> du Dagger Engine</li>
-    </ul>
+
+  <div v-click="2" class="tc-arch-col">
+    <div class="tc-arch-label v2">V2 — Notre module custom</div>
+    <div class="tc-arch-diagram v2">
+      <div class="tc-arch-box tc-arch-cli">🖥️ Dagger CLI</div>
+      <div class="tc-arch-connector">↓</div>
+      <div class="tc-arch-box tc-arch-engine">⚙️ Dagger Engine</div>
+      <div class="tc-arch-connector">↓</div>
+      <div class="tc-arch-box tc-arch-external">
+        🐳 Docker Host externe
+        <div class="tc-arch-containers" style="margin-top:6px;justify-content:center;">
+          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">mongo</span>
+          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">localstack</span>
+          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">postgres</span>
+        </div>
+      </div>
+    </div>
+    <div class="tc-arch-benefit-note">
+      ✅ Images téléchargées <strong>une seule fois</strong> — cache Docker persistant<br/>
+      🔀 En local → TCP daemon · Fallback → DinD service
+    </div>
   </div>
-  <div v-click="2" class="tc-arrow">→</div>
-  <div v-click="2" class="tc-panel tc-v2">
-    <div class="tc-badge">V2</div>
-    <div class="tc-panel-title">Notre module custom</div>
-    <ul>
-      <li>CI → <strong>Docker host externe</strong></li>
-      <li>Local → TCP daemon local</li>
-      <li>Images <strong>partagées entre runs</strong></li>
-      <li>Toujours transparent pour les devs</li>
-    </ul>
-  </div>
+
 </div>
 
 ---
