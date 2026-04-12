@@ -666,7 +666,7 @@ dagger -m dagger-kotlin call test \
 <div class="code-compare-label good-label">✅ Dagger Shell — une connexion</div>
 
 ```bash
-dagger --progress=dots -m ./dagger-kotlin --command '
+dagger -m ./dagger-kotlin --command '
   test_results=$( test --source=../kotlin-app )
   $test_results | result | export \
     --path=./build/test-results
