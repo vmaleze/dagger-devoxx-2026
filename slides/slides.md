@@ -615,7 +615,7 @@ return container
 ```
 
 </div>
-<div class="code-compare-block good-block">
+<div v-click="1" class="code-compare-block good-block">
 <div class="code-compare-label good-label">✅ ReturnType.ANY + objet TestResult</div>
 
 ```python
@@ -634,7 +634,7 @@ return TestResult(
 </div>
 </div>
 
-<div class="trap-insight">
+<div v-click="2" class="trap-insight">
   ⚠️ Problème : récupérer les rapports <strong>et</strong> le code de sortie nécessite <strong>deux appels Dagger distincts</strong> — deux connexions au engine.
 </div>
 
@@ -662,7 +662,7 @@ dagger -m dagger-kotlin call test \
 ```
 
 </div>
-<div class="code-compare-block good-block">
+<div v-click="1" class="code-compare-block good-block">
 <div class="code-compare-label good-label">✅ Dagger Shell — une connexion</div>
 
 ```bash
@@ -677,7 +677,7 @@ dagger --progress=dots -m ./dagger-kotlin --command '
 </div>
 </div>
 
-<div class="trap-insight">
+<div v-click="1" class="trap-insight">
   ⚡ <code>.exit</code> est un builtin Dagger Shell — il propage le code de sortie pour faire échouer la CI si les tests échouent, même après l'export des rapports.
 </div>
 
