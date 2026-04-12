@@ -206,7 +206,6 @@ layout: section
 
 ## Gouvernance & conventions
 
-<div class="speaker-tag">Rodrigo</div>
 
 ---
 
@@ -292,7 +291,6 @@ layout: section
 
 ## Le piège des performances
 
-<div class="speaker-tag">Vivien</div>
 
 ---
 
@@ -529,7 +527,6 @@ layout: section
 
 ## Tester comme en production
 
-<div class="speaker-tag">Rodrigo</div>
 
 ---
 
@@ -577,7 +574,6 @@ layout: section
 
 ## Rendre les résultats exploitables
 
-<div class="speaker-tag">Rodrigo</div>
 
 ---
 
@@ -676,7 +672,6 @@ layout: section
 
 ## Arrêtez de taper des romans dans votre terminal
 
-<div class="speaker-tag">Vivien</div>
 
 ---
 
@@ -729,7 +724,6 @@ layout: section
 
 ## Forcer les bonnes pratiques
 
-<div class="speaker-tag">Vivien</div>
 
 ---
 
