@@ -60,8 +60,6 @@ Then pass `--build-cache` and `--project-cache-dir` directly on the `gradlew` co
 .with_exec(["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"])
 ```
 
-> `GRADLE_OPTS` is for JVM flags (`-Xmx`, `-D…`), not Gradle CLI flags — pass those on the command line instead.
-
 > **PRIVATE** = each concurrent pipeline gets its own copy of the volume.
 > **SHARED** (default) would corrupt Gradle daemon lock files.
 > **LOCKED** would serialize all pipelines (3× slower).
@@ -101,7 +99,7 @@ Now plug the `betclic-dagger-testcontainers-config` module into the Dagger pipel
   "dependencies": [
     {
       "name": "testcontainers_config",
-      "source": "github.com/betclicgroup/betclic-dagger-testcontainers-config@v1.0.9"
+      "source": "github.com/betclicgroup/betclic-dagger-testcontainers-config@v1.0.11"
     }
   ]
 }
