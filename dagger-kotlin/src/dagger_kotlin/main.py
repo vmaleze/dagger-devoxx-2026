@@ -1,6 +1,6 @@
 import dagger
 from typing import Annotated
-from dagger import dag, function, object_type, field, Doc, Ignore
+from dagger import dag, function, object_type, field, Doc, Ignore, CacheSharingMode
 
 JDK_IMAGE = "eclipse-temurin:25-jdk"
 JRE_IMAGE = "eclipse-temurin:25-jre"
