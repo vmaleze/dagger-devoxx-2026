@@ -111,7 +111,7 @@ Now plug the `betclic-dagger-testcontainers-config` module into the Dagger pipel
 container = (
     self._gradle(source)
     .with_(dag.testcontainers_config().setup)   # ← detects CI vs local automatically
-    .with_exec(["./gradlew", "test"])
+    .with_exec(["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"])
 )
 ```
 
@@ -122,14 +122,17 @@ container = (
 dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
+**Comment the `RedisConnectivityTest`** to avoid loosing time on further steps
+
 ---
 
-## Step 4 — Survive test failures
+## Step 4 — Survive test failures + Dagger Shell
 
 > **Concept**: Right now a test failure crashes the pipeline — the report is never exported.
 > `ReturnType.ANY` lets the pipeline continue even when tests fail
 > so we always get the JUnit XML. We return a `TestResult` object that exposes
 > both `result()` (the report directory) and `exit_code()` (for the CI gate).
+> Then, instead of two separate `dagger call` connections, Dagger Shell does both in one.
 
 **Uncomment the failing test** in `kotlin-app/src/test/kotlin/com/example/FailingTest.kt`
 to show what a failure looks like.
@@ -148,56 +151,30 @@ in `dagger-kotlin/src/dagger_kotlin/main.py`:
 @function
 async def test(self, source: ...) -> TestResult:
     """Run the test suite — never raises, always returns results."""
-    container = (
-        self._gradle(source)
-        .with_(dag.testcontainers_config().setup)
+    container = self._gradle(source).with_exec(
+        ["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"],
+        expect=dagger.ReturnType.ANY,
     )
-
-    # expect=ReturnType.ANY → execution continues even if tests fail
-    container = container.with_exec(["./gradlew", "test"], expect=ReturnType.ANY)
     exit_code = await container.exit_code()
 
     return TestResult(_container=container, _exit_code=exit_code)
 ```
 
-Now the report is always exported, even when tests fail:
-
-```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app \
-  result export --path ./build/test-results
-
-ls build/test-results/    # JUnit XML files — even with failures
-```
-
-Check exit code:
-
-```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app exit-code
-```
-
----
-
-## Step 5 — Dagger Shell: one connection, two operations
-
-> **Concept**: Calling `dagger call` twice (once for the report, once for the exit code)
-> opens two separate connections to the Dagger Engine. Even if both are mostly cached,
-> the connection overhead adds up. Dagger Shell lets you do both in a single session.
-
-Show the two-call problem first:
+Now we need two things: export the report **and** propagate the exit code.
+Doing this with two separate `dagger call` invocations means two engine connections:
 
 ```bash
 # Connection 1 — export reports
-dagger -m dagger-kotlin call test --source ./kotlin-app \
-  result export --path ./build/test-results
+dagger -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results
 
 # Connection 2 — get exit code
 dagger -m dagger-kotlin call test --source ./kotlin-app exit-code
 ```
 
-Now switch to Dagger Shell directly:
+Dagger Shell solves this in a single session:
 
 ```bash
-dagger --progress=dots -m ./dagger-kotlin --command '
+dagger -m ./dagger-kotlin --command '
   test_results=$( . | test --source=../kotlin-app )
   $test_results | result | export --path=./build/test-results
   .exit $( $test_results | exit-code )
@@ -206,12 +183,12 @@ dagger --progress=dots -m ./dagger-kotlin --command '
 
 Key points to explain:
 - `$( . | test … )` — runs the test function, stores the lazy `TestResult` handle
-- `$test_results | result | export` — pulls the report directory out
+- `$test_results | result | export` — pulls the report directory out, even on failure
 - `.exit` — Dagger Shell builtin that sets the process exit code **after** the export
 
 ---
 
-## Step 6 — Wrap in a mise task
+## Step 5 — Wrap in a mise task
 
 > **Concept**: The Dagger command is powerful but verbose.
 > `mise` acts as the developer-facing interface — nobody needs to know Dagger internals.
@@ -239,23 +216,6 @@ mise run ci:test
 ls build/test-results/
 ```
 
-> `.exit` is a Dagger shell builtin — it sets the process exit code so the CI step
-> fails when tests fail, even though the report was already exported.
-
-Example GitHub Actions step (no changes needed):
-
-```yaml
-- name: Test
-  run: mise run ci:test
-
-- name: Upload test results
-  uses: actions/upload-artifact@v4
-  if: always()
-  with:
-    name: test-results
-    path: build/test-results/
-```
-
 ---
 
 ## Quick reference
@@ -263,9 +223,7 @@ Example GitHub Actions step (no changes needed):
 | Goal | Command |
 |---|---|
 | Run tests + export report | `dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results` |
-| Run tests + exit code (after step 4) | `dagger -m dagger-kotlin call test --source ./kotlin-app exit-code` |
-| Run tests + report (after step 4) | `dagger -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results` |
-| Run tests (mise) | `mise run ci:test` |
+| Run tests + report + exit code (after step 4) | `mise run ci:test` |
 | Build install dir | `dagger -m dagger-kotlin call build --source ./kotlin-app export --path ./dist` |
 | Build Docker image | `dagger -m dagger-kotlin call build-docker --source ./kotlin-app` |
 | Inspect functions | `dagger -m dagger-kotlin functions` |
