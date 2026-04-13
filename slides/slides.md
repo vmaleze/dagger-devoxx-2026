@@ -62,6 +62,7 @@ speakerCompanyLogo: /images/betclic-logo.svg
   <li><logos-github-actions /> Mise en place de la plateforme CI/CD GitHub Actions + Dagger</li>
   <li>📊 Déploiement des métriques DORA</li>
   <li><img src="/images/dagger.png" style="display:inline;height:1.2em;vertical-align:middle;margin-right:0.3em;" /> Adopteur de Dagger de la première heure</li>
+  <li><logos-linkedin-icon /> garcia-de-oliveira-rodrigo</li>
 </template>
 
 ---
@@ -836,7 +837,8 @@ class: text-center
 <div class="end-cta">
   <p>Des questions ?</p>
   <div class="social-links">
-    <span>🐦 @vmaleze</span>
+    <span>🐦 @vmaleze</span><br/>
+    <span><logos-linkedin-icon /> garcia-de-oliveira-rodrigo</span>
   </div>
 </div>
 
