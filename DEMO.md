@@ -127,7 +127,7 @@ to show what a failure looks like.
 Show that the pipeline crashes — no report exported:
 
 ```bash
-dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results
+rm -rf ./build/test-results && dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 The `TestResult` class is already in the file — now **update `test()` to use it**
@@ -160,7 +160,7 @@ dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app exit-cod
 Dagger Shell solves this in a single session:
 
 ```bash
-dagger --progress dots -m ./dagger-kotlin --command '
+rm -rf ./build/test-results && dagger --progress dots -m ./dagger-kotlin --command '
   test_results=$( . | test --source=../kotlin-app )
   $test_results | result | export --path=./build/test-results
   .exit $( $test_results | exit-code )
