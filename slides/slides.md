@@ -113,7 +113,7 @@ layout: section
 - **Pipeline as Code** : Go, Python, TypeScript... votre langage, vos règles
 - **Portable** : tourne en local, sur GitHub Actions, GitLab CI, etc.
 - **Modulaire** : partagez des modules comme des packages
-- **Caching** natif : plus de "works on my machine"
+- **Caching** natif : perfs accrues
 
 ---
 layout: default
@@ -292,6 +292,34 @@ layout: section
 
 ## Le piège des performances
 
+---
+layout: default
+---
+
+# Les principaux niveaux de cache Dagger
+
+<div class="cache-diagram">
+  <div class="cache-column layer-col">
+    <div class="cache-col-header layer">Layer Cache (BuildKit)</div>
+    <div class="cache-col-badge layer">Automatique</div>
+    <div class="cache-row">🔑 Hash des opérations</div>
+    <div class="cache-row">❄️ Immutable</div>
+    <div class="cache-row">📦 Image layers</div>
+    <div class="cache-row">⚡ Container ops</div>
+    <div class="cache-col-note">Invalidé si <em>n'importe quel input</em> change en amont</div>
+  </div>
+  <div class="cache-vs-divider">⚡</div>
+  <div class="cache-column volume-col">
+    <div class="cache-col-header volume">Cache Volumes</div>
+    <div class="cache-col-badge volume">with_mounted_cache</div>
+    <div class="cache-row volume-row">📦 gradle-cache → /root/.gradle</div>
+    <div class="cache-row volume-row">🔨 build-cache-{project} → /app/build-cache</div>
+    <div class="cache-row volume-row">🧶 yarn-cache → /root/.yarn</div>
+    <div class="cache-row volume-row">📦 npm-cache → /root/.npm</div>
+    <div class="cache-col-note">💾 Mutable · Nommé · Persiste entre les runs</div>
+  </div>
+</div>
+
 
 ---
 
@@ -330,73 +358,6 @@ layout: section
 </div>
 
 ---
-layout: default
----
-
-# Les deux niveaux de cache Dagger
-
-<div class="cache-diagram">
-  <div class="cache-column layer-col">
-    <div class="cache-col-header layer">Layer Cache (BuildKit)</div>
-    <div class="cache-col-badge layer">Automatique</div>
-    <div class="cache-row">🔑 Hash des opérations</div>
-    <div class="cache-row">❄️ Immutable</div>
-    <div class="cache-row">📦 Image layers</div>
-    <div class="cache-row">⚡ Container ops</div>
-    <div class="cache-col-note">Invalidé si <em>n'importe quel input</em> change en amont</div>
-  </div>
-  <div class="cache-vs-divider">⚡</div>
-  <div class="cache-column volume-col">
-    <div class="cache-col-header volume">Cache Volumes</div>
-    <div class="cache-col-badge volume">with_mounted_cache</div>
-    <div class="cache-row volume-row">📦 gradle-cache → /root/.gradle</div>
-    <div class="cache-row volume-row">🔨 build-cache-{project} → /app/build-cache</div>
-    <div class="cache-row volume-row">🧶 yarn-cache → /root/.yarn</div>
-    <div class="cache-row volume-row">📦 npm-cache → /root/.npm</div>
-    <div class="cache-col-note">💾 Mutable · Nommé · Persiste entre les runs</div>
-  </div>
-</div>
-
----
-
-# L'ordre des opérations
-
-<div class="trap-badge">⚠️ Le piège</div>
-
-<div class="code-compare-grid">
-  <div class="code-compare-block bad-block">
-    <div class="code-compare-label bad-label">❌ Source avant le cache — miss à chaque commit</div>
-
-```python
-container
-  .with_directory("/app", source)        # ← invalide tout ce qui suit
-  .with_mounted_cache("/root/.gradle", …)
-  .with_exec(["gradle", "build"])
-```
-
-  </div>
-  <div class="code-compare-block good-block">
-    <div class="code-compare-label good-label">✅ Cache avant le source — hit garanti</div>
-
-```python
-container
-  .with_mounted_cache(                   # ← layer stable
-      "/root/.gradle",
-      dag.cache_volume("gradle-cache"),
-      sharing=CacheSharingMode.PRIVATE,
-  )
-  .with_directory("/app", source)
-  .with_exec(["gradle", "build"])
-```
-
-  </div>
-</div>
-
-<div class="trap-insight">
-  💡 BuildKit invalide tous les layers en aval d'un changement. Le cache doit être défini <em>avant</em> la source.
-</div>
-
----
 
 # `CacheSharingMode` — accès concurrent au cache
 
@@ -425,7 +386,7 @@ container
 
   <div class="tl-panel warn">
     <div class="tl-panel-title">LOCKED</div>
-    <div class="tl-panel-desc">Accès exclusif au volume — les pipelines 2 et 3 attendent que le verrou soit libéré.</div>
+    <div class="tl-panel-desc">Accès exclusif au volume — les pipelines 2 et 3 attendent que le verrou soit libéré. Pas de parallélisation !</div>
     <div class="tl-traces">
       <div class="tl-span-row">
         <div class="tl-service">Pipeline 1</div>
@@ -472,53 +433,6 @@ container
   </div>
 
 </div>
-
----
-
-# Quoi cacher — et comment ?
-
-<table class="cache-safety-table">
-  <thead>
-    <tr>
-      <th>Chemin</th>
-      <th>Contenu</th>
-      <th>Concurrent ?</th>
-      <th>Mode</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>/root/.m2/repository</code></td>
-      <td>JARs Maven</td>
-      <td>✅ Read-only après download</td>
-      <td><span class="safe-badge ok">SHARED</span></td>
-    </tr>
-    <tr>
-      <td><code>/root/.npm</code> · <code>/root/.yarn</code></td>
-      <td>Packages JS</td>
-      <td>✅ Read-only après download</td>
-      <td><span class="safe-badge ok">SHARED</span></td>
-    </tr>
-    <tr class="row-mixed">
-      <td><code>/root/.gradle</code> <em>(entier)</em></td>
-      <td>Deps + daemon + locks</td>
-      <td>⚠️ Daemon écrit en continu</td>
-      <td><span class="safe-badge warn">PRIVATE</span></td>
-    </tr>
-    <tr class="row-danger">
-      <td><code>/app/build-cache</code></td>
-      <td>Artefacts compilés Gradle</td>
-      <td>❌ Écrit par chaque build</td>
-      <td><span class="safe-badge bad">PRIVATE obligatoire</span></td>
-    </tr>
-    <tr class="row-danger">
-      <td><code>/root/.gradle/daemon</code></td>
-      <td>Verrous daemon</td>
-      <td>❌ Accès exclusif</td>
-      <td><span class="safe-badge bad">Ne pas cacher</span></td>
-    </tr>
-  </tbody>
-</table>
 
 ---
 layout: section
@@ -609,8 +523,10 @@ layout: section
 <div class="code-compare-label bad-label">❌ Par défaut — pipeline stoppé, rapport perdu</div>
 
 ```python
-# Si des tests échouent → exception levée immédiatement
-container = container.with_exec(["./gradlew", "test"])
+# Si des tests échouent 
+# → exception levée immédiatement
+container = container.with_exec(
+    ["./gradlew", "test"])
 # → export jamais atteint
 return container
 ```
@@ -701,16 +617,10 @@ layout: section
 **Avant — appel Dagger direct**
 
 ```bash
-dagger --command '
-  test_results=$(
-    git@github.com:betclic-dagger-dotnet@"$VER"
-      --dotnet-version="$DOTNET_VERSION"
-    | with-test-containers-auth
-    | with-sonar --project-name="$NAME"
-    | test --source=.
-  )
-  $test_results | result | export
-  .exit $($test_results | exit-code)
+dagger -m ./dagger-kotlin --command '
+  test_results=$( . | test --source=../kotlin-app )
+  $test_results | result | export --path=./build/test-results
+  .exit $( $test_results | exit-code )
 '
 ```
 
@@ -784,10 +694,6 @@ layout: section
 ### Priorité de résolution
 
 <div class="rollout-track">
-  <div class="rt-row rt-pinned">
-    <div class="rt-label">📌 <strong>Pinné</strong></div>
-    <div class="rt-desc">Version forcée dans <code>mise.toml</code> — contrôle total</div>
-  </div>
   <div class="rt-row rt-early">
     <div class="rt-label">✨ <strong>Early adopter</strong></div>
     <div class="rt-desc">Flag opt-in — reçoit la nouvelle version en avance</div>

@@ -17,7 +17,7 @@ mise tasks         # verify ci:test task is listed
 ## Step 1 — Run the basic test
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
+dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 Point out: first run is slow — Gradle downloads everything on every run. No cache.
@@ -60,14 +60,10 @@ Then pass `--build-cache` and `--project-cache-dir` directly on the `gradlew` co
 .with_exec(["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"])
 ```
 
-> **PRIVATE** = each concurrent pipeline gets its own copy of the volume.
-> **SHARED** (default) would corrupt Gradle daemon lock files.
-> **LOCKED** would serialize all pipelines (3× slower).
-
 Re-run to show cache hit on second run:
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
+dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 ---
@@ -80,12 +76,6 @@ dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/te
 
 **Uncomment `RedisConnectivityTest`** in `kotlin-app/src/test/kotlin/com/example/RedisConnectivityTest.kt`
 to activate the TestContainers test.
-
-Run it locally first (needs a local Docker daemon):
-
-```bash
-cd kotlin-app && ./gradlew test && cd ..
-```
 
 Now plug the `betclic-dagger-testcontainers-config` module into the Dagger pipeline.
 
@@ -108,10 +98,7 @@ Now plug the `betclic-dagger-testcontainers-config` module into the Dagger pipel
 **2. Wire it into `test()` with a single `with_()`:**
 
 ```python
-container = (
-    self._gradle(source)
-    .with_(dag.testcontainers_config().setup)   # ← detects CI vs local automatically
-    .with_exec(["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"])
+  .with_(dag.testcontainers_config().setup)   # ← detects CI vs local automatically
 )
 ```
 
@@ -119,7 +106,7 @@ container = (
 > On CI it points to the shared Docker host. Locally it falls back to DinD.
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
+dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 **Comment the `RedisConnectivityTest`** to avoid loosing time on further steps
@@ -140,8 +127,7 @@ to show what a failure looks like.
 Show that the pipeline crashes — no report exported:
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
-# ❌ Pipeline fails — report is lost
+dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results
 ```
 
 The `TestResult` class is already in the file — now **update `test()` to use it**
@@ -165,16 +151,16 @@ Doing this with two separate `dagger call` invocations means two engine connecti
 
 ```bash
 # Connection 1 — export reports
-dagger -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results
+dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results
 
 # Connection 2 — get exit code
-dagger -m dagger-kotlin call test --source ./kotlin-app exit-code
+dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app exit-code
 ```
 
 Dagger Shell solves this in a single session:
 
 ```bash
-dagger -m ./dagger-kotlin --command '
+dagger --progress dots -m ./dagger-kotlin --command '
   test_results=$( . | test --source=../kotlin-app )
   $test_results | result | export --path=./build/test-results
   .exit $( $test_results | exit-code )
@@ -201,7 +187,7 @@ Fill in `.mise/tasks/ci/test` (same Dagger Shell command, now behind a simple `m
 #MISE description="Run the kotlin-app test suite via Dagger"
 set -euo pipefail
 
-dagger --progress=dots -m ./dagger-kotlin --command '
+dagger --progress dots -m ./dagger-kotlin --command '
   test_results=$( . | test --source=../kotlin-app )
   $test_results | result | export --path=./build/test-results
   .exit $( $test_results | exit-code )

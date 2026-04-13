@@ -292,7 +292,7 @@
 }
 
 .arch-v2-group-label {
-  font-size: 0.72rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #6B7280;
   text-transform: uppercase;
@@ -316,13 +316,13 @@
 }
 
 .arch-v2-rname {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--betclic-dark);
 }
 
 .arch-v2-rtag {
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   color: #6B7280;
   margin-top: 4px;
 }
@@ -343,13 +343,13 @@
 }
 
 .arch-v2-ename {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: white;
 }
 
 .arch-v2-esub {
-  font-size: 0.68rem;
+  font-size: 0.74rem;
   color: rgba(255,255,255,0.7);
   margin-top: 3px;
 }
@@ -359,7 +359,7 @@
   border-radius: 6px;
   padding: 6px 14px;
   margin-top: 12px;
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   font-weight: 700;
   color: var(--betclic-dark);
   display: inline-block;
@@ -373,7 +373,7 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--betclic-dark);
   line-height: 1.3;
@@ -393,7 +393,7 @@
   border-left: 4px solid var(--betclic-red);
   padding: 16px 20px;
   border-radius: 0 8px 8px 0;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
 }
 
 /* Problems flow */
@@ -428,13 +428,13 @@
 }
 
 .pf-title {
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 800;
   color: var(--betclic-dark);
 }
 
 .pf-desc {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: var(--betclic-gray);
   line-height: 1.4;
 }
@@ -459,7 +459,7 @@
 .slidev-layout ul li {
   padding: 6px 0 6px 20px;
   position: relative;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .slidev-layout ul li::before {
@@ -514,6 +514,8 @@
 .slidev-layout pre code {
   color: var(--betclic-dark) !important;
   background: transparent !important;
+  font-size: 0.88rem !important;
+  line-height: 1.55 !important;
 }
 
 .slidev-layout :not(pre) > code {
@@ -565,7 +567,7 @@
 }
 
 .cache-col-header {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   margin-bottom: 2px;
@@ -600,7 +602,7 @@
 }
 
 .cache-row {
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   color: var(--betclic-dark);
   padding: 5px 10px;
   border-radius: 6px;
@@ -609,12 +611,12 @@
 
 .cache-row.volume-row {
   font-family: 'Roboto Mono', monospace;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
 }
 
 .cache-col-note {
   margin-top: auto;
-  font-size: 0.78rem;
+  font-size: 0.84rem;
   color: var(--betclic-gray);
   border-top: 1px dashed #D1D5DB;
   padding-top: 8px;
@@ -749,12 +751,10 @@
   border-left: 4px solid #F59E0B;
   border-radius: 6px;
   padding: 10px 16px;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 600;
   margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  line-height: 1.5;
 }
 
 /* ============================================================
@@ -868,7 +868,7 @@
 .tl-panel-title {
   font-family: monospace;
   font-weight: 800;
-  font-size: 0.92rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -877,10 +877,11 @@
 .tl-panel.good .tl-panel-title { color: #14532D; }
 
 .tl-panel-desc {
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: #4B5563;
   line-height: 1.4;
   text-align: center;
+  min-height: 2.8rem;
 }
 
 .tl-traces {
@@ -898,7 +899,7 @@
 
 .tl-service {
   width: 58px;
-  font-size: 0.62rem;
+  font-size: 0.68rem;
   color: #6B7280;
   text-align: right;
   flex-shrink: 0;
@@ -947,7 +948,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.58rem;
+  font-size: 0.64rem;
   font-weight: 800;
   color: #DC2626;
   letter-spacing: 0.04em;
@@ -956,7 +957,7 @@
 .tl-axis {
   display: flex;
   justify-content: space-between;
-  font-size: 0.58rem;
+  font-size: 0.64rem;
   color: #9CA3AF;
   border-top: 1px solid rgba(0,0,0,0.1);
   padding: 3px 0 0 64px;
@@ -965,7 +966,7 @@
 .tl-panel-verdict {
   text-align: center;
   font-weight: 800;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
 }
 
 .tl-panel.bad  .tl-panel-verdict { color: #991B1B; }
@@ -978,7 +979,7 @@
 .cache-safety-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
   margin-top: 14px;
 }
 
@@ -1009,7 +1010,7 @@
 }
 
 .cache-safety-table code {
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   background: #F3F4F6;
   padding: 1px 5px;
   border-radius: 3px;
@@ -1018,7 +1019,7 @@
 
 .safe-badge {
   display: inline-block;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   font-weight: 800;
   padding: 2px 8px;
   border-radius: 10px;
@@ -1069,7 +1070,7 @@
 }
 
 .mc-name {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--betclic-dark);
 }
@@ -1083,7 +1084,7 @@
 }
 
 .mc-cap {
-  font-size: 0.6rem;
+  font-size: 0.68rem;
   background: #E5E7EB;
   padding: 2px 7px;
   border-radius: 10px;
@@ -1104,7 +1105,7 @@
   border: 1px solid #BFDBFE;
   border-radius: 10px;
   padding: 10px 16px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: #1E3A5F;
   text-align: center;
 }
@@ -1116,7 +1117,7 @@
   margin-top: 14px;
   padding: 10px 0;
   border-top: 1px solid #E5E7EB;
-  font-size: 0.75rem;
+  font-size: 0.83rem;
   color: var(--betclic-gray);
   font-weight: 600;
 }
@@ -1149,7 +1150,7 @@
 }
 
 .context-panel-header {
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: 0.02em;
   margin-bottom: 4px;
@@ -1164,12 +1165,12 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   color: #374151;
 }
 
 .context-panel p {
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   color: #374151;
   margin: 0;
   line-height: 1.6;
@@ -1296,7 +1297,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   position: relative;
   flex: 1;
   justify-content: space-between;
@@ -1343,7 +1344,7 @@
   border: 1.5px dashed rgba(255,255,255,0.4);
   border-radius: 6px;
   padding: 8px;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   color: rgba(255,255,255,0.9);
 }
 
@@ -1363,7 +1364,7 @@
   background: rgba(255,255,255,0.2);
   border-radius: 4px;
   padding: 2px 8px;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
 }
 
 .tc-arch-external {
@@ -1407,7 +1408,7 @@
   border-left: 3px solid var(--betclic-red);
   border-radius: 0 6px 6px 0;
   padding: 8px 12px;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: #991B1B;
   line-height: 1.4;
 }
@@ -1417,7 +1418,7 @@
   border-left: 3px solid #16A34A;
   border-radius: 0 6px 6px 0;
   padding: 8px 12px;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: #14532D;
   line-height: 1.4;
 }
@@ -1432,7 +1433,7 @@
   background: #F0FDF4;
   border-left: 3px solid #16A34A;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.83rem;
   color: #15803D;
   font-weight: 600;
 }
@@ -1522,13 +1523,13 @@
 .sf-icon { font-size: 1.6rem; }
 
 .sf-label {
-  font-size: 0.72rem;
+  font-size: 0.82rem;
   color: var(--betclic-dark);
   line-height: 1.4;
 }
 
 .sf-label code {
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   background: #E5E7EB;
   padding: 1px 5px;
   border-radius: 4px;
@@ -1536,7 +1537,7 @@
 
 .sf-label small {
   display: block;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   color: var(--betclic-gray);
   margin-top: 2px;
 }
@@ -1554,7 +1555,7 @@
   background: #EFF6FF;
   border-left: 3px solid #3B82F6;
   border-radius: 6px;
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   color: #1E40AF;
   line-height: 1.6;
 }
@@ -1577,17 +1578,17 @@
 }
 
 .rt-label {
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 
 .rt-desc {
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   color: #6B7280;
 }
 
 .rt-desc code {
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   background: #E5E7EB;
   padding: 1px 4px;
   border-radius: 3px;
