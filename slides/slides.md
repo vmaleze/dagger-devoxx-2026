@@ -308,8 +308,8 @@ layout: default
     <div class="cache-row">⚡ Container ops</div>
     <div class="cache-col-note">Invalidé si <em>n'importe quel input</em> change en amont</div>
   </div>
-  <div class="cache-vs-divider">⚡</div>
-  <div class="cache-column volume-col">
+  <div v-click class="cache-vs-divider">⚡</div>
+  <div v-click="1" class="cache-column volume-col">
     <div class="cache-col-header volume">Cache Volumes</div>
     <div class="cache-col-badge volume">with_mounted_cache</div>
     <div class="cache-row volume-row">📦 gradle-cache → /root/.gradle</div>
@@ -384,7 +384,7 @@ layout: default
     <div class="tl-panel-verdict">⚠️ Cache corrompu</div>
   </div>
 
-  <div class="tl-panel warn">
+  <div v-click class="tl-panel warn">
     <div class="tl-panel-title">LOCKED</div>
     <div class="tl-panel-desc">Accès exclusif au volume — les pipelines 2 et 3 attendent que le verrou soit libéré. Pas de parallélisation !</div>
     <div class="tl-traces">
@@ -411,7 +411,7 @@ layout: default
     <div class="tl-panel-verdict">🐢 3× plus lent</div>
   </div>
 
-  <div class="tl-panel good">
+  <div v-click class="tl-panel good">
     <div class="tl-panel-title">PRIVATE</div>
     <div class="tl-panel-desc">Copie isolée par container — chaque pipeline a son propre volume, pas de contention.</div>
     <div class="tl-traces">
@@ -611,10 +611,11 @@ layout: section
 
 # Simplifier les commandes Dagger
 
-<div class="two-col" style="gap:20px">
-<div>
+<div class="simplify-demo">
+  <div class="sl-before-label simplify-label simplify-before-label">Avant — appel Dagger direct</div>
+  <div v-click="1" class="sl-after-label simplify-label simplify-after-label">Après — mise comme interface</div>
 
-**Avant — appel Dagger direct**
+  <div class="sl-before-code">
 
 ```bash
 dagger -m ./dagger-kotlin --command '
@@ -624,24 +625,23 @@ dagger -m ./dagger-kotlin --command '
 '
 ```
 
-</div>
-<div>
+  </div>
 
-**Après — mise comme interface**
+  <div v-click="1" class="sl-arrow">→</div>
+
+  <div v-click="1" class="sl-after-code">
 
 ```bash
-mise run dotnet:ci:test \
-  --build-version ${BUILD_VERSION} \
-  --with-sonar
+mise run dotnet:ci:test
 ```
 
-<div class="mise-win">
+  </div>
+</div>
+
+<div v-click="1" class="simplify-win-bar">
   <span>✅ Pas de syntaxe Dagger à connaître</span>
   <span>✅ Pas d'env vars de versions</span>
   <span>✅ Dagger réduit à un détail d'implémentation</span>
-</div>
-
-</div>
 </div>
 
 ---
@@ -660,26 +660,26 @@ layout: section
 <div class="streamline-flow">
   <div class="sf-step">
     <div class="sf-icon">👩‍💻</div>
-    <div class="sf-label"><code>mise run jvm:ci:test</code></div>
+    <div class="sf-label"><code>mise run dotnet:ci:test</code></div>
   </div>
-  <div class="sf-arrow">→</div>
-  <div class="sf-step sf-highlight">
+  <div v-click="1" class="sf-arrow">→</div>
+  <div v-click="1" class="sf-step sf-highlight">
     <div class="sf-icon">🔍</div>
     <div class="sf-label"><strong>betclic-action-tools-version</strong><br/><small>résout les versions pour le domaine</small></div>
   </div>
-  <div class="sf-arrow">→</div>
-  <div class="sf-step">
+  <div v-click="2" class="sf-arrow">→</div>
+  <div v-click="2" class="sf-step">
     <div class="sf-icon">⚙️</div>
     <div class="sf-label">Dagger appelé<br/><small>avec la bonne version du module</small></div>
   </div>
-  <div class="sf-arrow">→</div>
-  <div class="sf-step sf-ok">
+  <div v-click="3" class="sf-arrow">→</div>
+  <div v-click="3" class="sf-step sf-ok">
     <div class="sf-icon">✅</div>
     <div class="sf-label">Résultat<br/><small>local = CI, toujours</small></div>
   </div>
 </div>
 
-<div class="streamline-note">
+<div v-click="4" class="streamline-note">
   Aucune env var à gérer, aucune version à pinner manuellement.<br/>
   <strong>betclic-action-tools-version</strong> est embarqué dans chaque tâche mise — invisible pour le développeur.
 </div>

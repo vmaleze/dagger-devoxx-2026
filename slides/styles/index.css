@@ -1423,6 +1423,61 @@
   line-height: 1.4;
 }
 
+/* ---- Simplify Dagger slide ---- */
+.simplify-demo {
+  display: grid;
+  grid-template-columns: 1fr 48px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 0;
+  row-gap: 10px;
+  margin-top: 20px;
+}
+
+/* Explicit placement — immune to v-click wrapper injection */
+.sl-before-label { grid-column: 1; grid-row: 1; align-self: center; }
+.sl-after-label  { grid-column: 3; grid-row: 1; align-self: center; }
+.sl-before-code  { grid-column: 1; grid-row: 2; align-self: stretch; }
+.sl-arrow        { grid-column: 2; grid-row: 2; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #9CA3AF; font-weight: 300; }
+.sl-after-code   { grid-column: 3; grid-row: 2; align-self: center; }
+
+.simplify-label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+.simplify-before-label {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+.simplify-after-label {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.simplify-win-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 32px;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #15803D;
+}
+
 /* ---- Mise slides ---- */
 .mise-win {
   display: flex;
