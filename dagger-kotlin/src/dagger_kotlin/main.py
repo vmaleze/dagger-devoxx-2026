@@ -1,6 +1,6 @@
 import dagger
 from typing import Annotated
-from dagger import dag, function, object_type, field, Doc, Ignore, ReturnType, CacheSharingMode
+from dagger import dag, function, object_type, field, Doc, Ignore
 
 JDK_IMAGE = "eclipse-temurin:25-jdk"
 JRE_IMAGE = "eclipse-temurin:25-jre"
@@ -14,6 +14,20 @@ SOURCE_IGNORE = [
     ".idea",
     ".vscode",
 ]
+
+
+async def _extract_test_report(container: dagger.Container) -> dagger.Directory:
+    """Collect JUnit XML files from the build output into a flat directory."""
+    report = dag.directory()
+    xml_files = await container.directory("/app").glob(
+        "**/build/test-results/test/*.xml"
+    )
+    for xml in xml_files:
+        report = report.with_file(
+            xml.split("/")[-1],
+            container.directory("/app").file(xml),
+        )
+    return report
 
 
 @object_type
@@ -31,16 +45,7 @@ class TestResult:
     @function
     async def result(self) -> dagger.Directory:
         """JUnit XML reports, extracted from the build output."""
-        report = dag.directory()
-        xml_files = await self._container.directory("/app").glob(
-            "**/build/test-results/test/*.xml"
-        )
-        for xml in xml_files:
-            report = report.with_file(
-                xml.split("/")[-1],
-                self._container.directory("/app").file(xml),
-            )
-        return report
+        return await _extract_test_report(self._container)
 
 
 @object_type
@@ -49,38 +54,18 @@ class DaggerKotlin:
         return (
             dag.container()
             .from_(JDK_IMAGE)
-            # Cache BEFORE source — these layers stay stable across commits
-            .with_mounted_cache(
-                "/root/.gradle",
-                dag.cache_volume("gradle-cache"),
-                sharing=CacheSharingMode.PRIVATE,
-            )
-            .with_mounted_cache(
-                "/app/build-cache",
-                dag.cache_volume("build-cache-kotlin-app"),
-                sharing=CacheSharingMode.PRIVATE,
-            )
             .with_workdir("/app")
-            .with_directory("/app", source)  # source AFTER cache
+            .with_directory("/app", source)
         )
 
     @function
     async def test(
         self,
         source: Annotated[dagger.Directory, Ignore(SOURCE_IGNORE), Doc("Source directory of the kotlin app")],
-    ) -> TestResult:
-        """Run the test suite — never raises, always returns results and exit code."""
-        container = (
-            self._gradle(source)
-            .with_(dag.testcontainers_config().setup)
-            # expect=ReturnType.ANY → continues even if tests fail
-            .with_exec(
-                ["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"],
-                expect=ReturnType.ANY,
-            )
-        )
-        exit_code = await container.exit_code()
-        return TestResult(_container=container, _exit_code=exit_code)
+    ) -> dagger.Directory:
+        """Run the test suite and return JUnit XML reports."""
+        container = self._gradle(source).with_exec(["./gradlew", "test"])
+        return await _extract_test_report(container)
 
     @function
     def build(

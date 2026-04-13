@@ -17,7 +17,7 @@ mise tasks         # verify ci:test task is listed
 ## Step 1 — Run the basic test
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app
+dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 Point out: first run is slow — Gradle downloads everything on every run. No cache.
@@ -69,7 +69,7 @@ Then pass `--build-cache` and `--project-cache-dir` directly on the `gradlew` co
 Re-run to show cache hit on second run:
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app
+dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 ---
@@ -80,7 +80,9 @@ dagger -m dagger-kotlin call test --source ./kotlin-app
 > N parallel tests = N simultaneous pulls. V2 routes TestContainers to a shared external
 > Docker host — images survive between runs, transparent to developers.
 
-The kotlin-app already has a `RedisConnectivityTest` that uses TestContainers.
+**Uncomment `RedisConnectivityTest`** in `kotlin-app/src/test/kotlin/com/example/RedisConnectivityTest.kt`
+to activate the TestContainers test.
+
 Run it locally first (needs a local Docker daemon):
 
 ```bash
@@ -108,92 +110,65 @@ Now plug the `betclic-dagger-testcontainers-config` module into the Dagger pipel
 **2. Wire it into `test()` with a single `with_()`:**
 
 ```python
-@function
-async def test(self, source: ...) -> str:
-    """Run the test suite"""
-    return await (
-        self._gradle(source)
-        .with_(dag.testcontainers_config().setup)   # ← detects CI vs local automatically
-        .with_exec(["./gradlew", "test"])
-        .stdout()
-    )
+container = (
+    self._gradle(source)
+    .with_(dag.testcontainers_config().setup)   # ← detects CI vs local automatically
+    .with_exec(["./gradlew", "test"])
+)
 ```
 
 > `with_()` applies a module function as middleware — one line wires TestContainers.
 > On CI it points to the shared Docker host. Locally it falls back to DinD.
 
 ```bash
-dagger -m dagger-kotlin call test --source ./kotlin-app
+dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
 ---
 
-## Step 4 — Extract test report
+## Step 4 — Survive test failures
 
-> **Concept**: `ReturnType.ANY` lets the pipeline continue even when tests fail
-> so we can always export the JUnit XML. We return a `TestResult` object that exposes
+> **Concept**: Right now a test failure crashes the pipeline — the report is never exported.
+> `ReturnType.ANY` lets the pipeline continue even when tests fail
+> so we always get the JUnit XML. We return a `TestResult` object that exposes
 > both `result()` (the report directory) and `exit_code()` (for the CI gate).
 
 **Uncomment the failing test** in `kotlin-app/src/test/kotlin/com/example/FailingTest.kt`
 to show what a failure looks like.
 
-**Replace `test()` and add `TestResult`** in `dagger-kotlin/src/dagger_kotlin/main.py`
-(the `TestResult` class is already in the file — now change `test()` to return it):
+Show that the pipeline crashes — no report exported:
 
-```python
-@object_type
-class TestResult:
-    """Holds test results without failing the pipeline on test errors."""
-
-    _container: dagger.Container = field()
-    _exit_code: int = field()
-
-    @function
-    def exit_code(self) -> int:
-        """0 = all tests passed, non-zero = failures."""
-        return self._exit_code
-
-    @function
-    async def result(self) -> dagger.Directory:
-        """JUnit XML reports, extracted from the build output."""
-        report = dag.directory()
-        xml_files = await self._container.directory("/app").glob(
-            "**/build/test-results/test/*.xml"
-        )
-        for xml in xml_files:
-            report = report.with_file(
-                xml.split("/")[-1],
-                self._container.directory("/app").file(xml),
-            )
-        return report
-
-
-@object_type
-class DaggerKotlin:
-    # ...
-
-    @function
-    async def test(self, source: ...) -> TestResult:
-        """Run the test suite — never raises, always returns results."""
-        container = (
-            self._gradle(source)
-            .with_(dag.testcontainers_config().setup)
-        )
-
-        # expect=ReturnType.ANY → execution continues even if tests fail
-        container = container.with_exec(["./gradlew", "test"], expect=ReturnType.ANY)
-        exit_code = await container.exit_code()
-
-        return TestResult(_container=container, _exit_code=exit_code)
+```bash
+dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
+# ❌ Pipeline fails — report is lost
 ```
 
-Export the report:
+The `TestResult` class is already in the file — now **update `test()` to use it**
+in `dagger-kotlin/src/dagger_kotlin/main.py`:
+
+```python
+@function
+async def test(self, source: ...) -> TestResult:
+    """Run the test suite — never raises, always returns results."""
+    container = (
+        self._gradle(source)
+        .with_(dag.testcontainers_config().setup)
+    )
+
+    # expect=ReturnType.ANY → execution continues even if tests fail
+    container = container.with_exec(["./gradlew", "test"], expect=ReturnType.ANY)
+    exit_code = await container.exit_code()
+
+    return TestResult(_container=container, _exit_code=exit_code)
+```
+
+Now the report is always exported, even when tests fail:
 
 ```bash
 dagger -m dagger-kotlin call test --source ./kotlin-app \
   result export --path ./build/test-results
 
-ls build/test-results/    # JUnit XML files ready for GitHub Actions upload
+ls build/test-results/    # JUnit XML files — even with failures
 ```
 
 Check exit code:
@@ -289,9 +264,10 @@ Example GitHub Actions step (no changes needed):
 
 | Goal | Command |
 |---|---|
-| Run tests + exit code | `dagger -m dagger-kotlin call test --source ./kotlin-app exit-code` |
+| Run tests + export report | `dagger -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results` |
+| Run tests + exit code (after step 4) | `dagger -m dagger-kotlin call test --source ./kotlin-app exit-code` |
+| Run tests + report (after step 4) | `dagger -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results` |
 | Run tests (mise) | `mise run ci:test` |
-| Export test report | `dagger -m dagger-kotlin call test --source ./kotlin-app result export --path ./build/test-results` |
 | Build install dir | `dagger -m dagger-kotlin call build --source ./kotlin-app export --path ./dist` |
 | Build Docker image | `dagger -m dagger-kotlin call build-docker --source ./kotlin-app` |
 | Inspect functions | `dagger -m dagger-kotlin functions` |

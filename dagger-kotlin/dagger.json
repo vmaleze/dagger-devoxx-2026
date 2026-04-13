@@ -4,11 +4,5 @@
   "sdk": {
     "source": "python"
   },
-  "dependencies": [
-    {
-      "name": "testcontainers-config",
-      "source": "github.com/betclicgroup/betclic-dagger-testcontainers-config@v1.0.11",
-      "pin": "88e16179631ea6119c7ab76f640c3bee6f3f40d9"
-    }
-  ]
+  "dependencies": []
 }

@@ -2,8 +2,4 @@
 #MISE description="Run the kotlin-app test suite via Dagger"
 set -euo pipefail
 
-dagger --progress=dots -m ./dagger-kotlin --command '
-  test_results=$( test --source=../kotlin-app )
-  $test_results | result | export --path=./build/test-results
-  .exit $( $test_results | exit-code )
-'
+# TODO: fill in during the demo (Step 6)
