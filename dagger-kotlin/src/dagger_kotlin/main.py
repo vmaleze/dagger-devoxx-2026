@@ -54,6 +54,16 @@ class DaggerKotlin:
         return (
             dag.container()
             .from_(JDK_IMAGE)
+            # .with_mounted_cache(
+            #     "/root/.gradle",
+            #     dag.cache_volume("gradle-cache"),
+            #     sharing=CacheSharingMode.PRIVATE,  # isolated per pipeline
+            # )
+            # .with_mounted_cache(
+            #     "/app/build-cache",
+            #     dag.cache_volume("build-cache-kotlin-app"),
+            #     sharing=CacheSharingMode.PRIVATE,
+            # )
             .with_workdir("/app")
             .with_directory("/app", source)
         )
@@ -65,7 +75,22 @@ class DaggerKotlin:
     ) -> dagger.Directory:
         """Run the test suite and return JUnit XML reports."""
         container = self._gradle(source).with_exec(["./gradlew", "test"])
+        # container = self._gradle(source).with_exec(["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"])
         return await _extract_test_report(container)
+
+    # @function
+    # async def test(
+    #     self,
+    #     source: Annotated[dagger.Directory, Ignore(SOURCE_IGNORE), Doc("Source directory of the kotlin app")],
+    # ) -> TestResult:
+    #     """Run the test suite — never raises, always returns results."""
+    #     container = self._gradle(source).with_exec(
+    #         ["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"],
+    #         expect=dagger.ReturnType.ANY,
+    #     )
+    #     exit_code = await container.exit_code()
+
+    #     return TestResult(_container=container, _exit_code=exit_code)
 
     @function
     def build(

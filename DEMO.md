@@ -29,30 +29,7 @@ Point out: first run is slow — Gradle downloads everything on every run. No ca
 > **Concept**: Dagger layer cache (automatic, immutable) vs mounted cache volumes (mutable, named, persisted).
 > Key trap: cache must be mounted **before** the source directory.
 
-Edit `_gradle()` in `dagger-kotlin/src/dagger_kotlin/main.py`:
-
-```python
-from dagger import CacheSharingMode
-
-def _gradle(self, source: dagger.Directory) -> dagger.Container:
-    return (
-        dag.container()
-        .from_(JDK_IMAGE)
-        # ✅ Cache BEFORE source — this layer stays stable across commits
-        .with_mounted_cache(
-            "/root/.gradle",
-            dag.cache_volume("gradle-cache"),
-            sharing=CacheSharingMode.PRIVATE,  # isolated per pipeline
-        )
-        .with_mounted_cache(
-            "/app/build-cache",
-            dag.cache_volume("build-cache-kotlin-app"),
-            sharing=CacheSharingMode.PRIVATE,
-        )
-        .with_workdir("/app")
-        .with_directory("/app", source)         # ← source AFTER cache
-    )
-```
+Uncomment the cache section in `_gradle()` in `dagger-kotlin/src/dagger_kotlin/main.py`.
 
 Then pass `--build-cache` and `--project-cache-dir` directly on the `gradlew` commands:
 
@@ -68,52 +45,7 @@ dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export -
 
 ---
 
-## Step 3 — TestContainers
-
-> **Concept**: V1 used Docker-in-Docker — Docker restarts every run, no image caching,
-> N parallel tests = N simultaneous pulls. V2 routes TestContainers to a shared external
-> Docker host — images survive between runs, transparent to developers.
-
-**Uncomment `RedisConnectivityTest`** in `kotlin-app/src/test/kotlin/com/example/RedisConnectivityTest.kt`
-to activate the TestContainers test.
-
-Now plug the `betclic-dagger-testcontainers-config` module into the Dagger pipeline.
-
-**1. Add the dependency in `dagger-kotlin/dagger.json`:**
-
-```json
-{
-  "name": "dagger-kotlin",
-  "engineVersion": "v0.20.3",
-  "sdk": { "source": "python" },
-  "dependencies": [
-    {
-      "name": "testcontainers_config",
-      "source": "github.com/betclicgroup/betclic-dagger-testcontainers-config@v1.0.11"
-    }
-  ]
-}
-```
-
-**2. Wire it into `test()` with a single `with_()`:**
-
-```python
-  .with_(dag.testcontainers_config().setup)   # ← detects CI vs local automatically
-)
-```
-
-> `with_()` applies a module function as middleware — one line wires TestContainers.
-> On CI it points to the shared Docker host. Locally it falls back to DinD.
-
-```bash
-dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
-```
-
-**Comment the `RedisConnectivityTest`** to avoid loosing time on further steps
-
----
-
-## Step 4 — Survive test failures + Dagger Shell
+## Step 3 — Survive test failures + Dagger Shell
 
 > **Concept**: Right now a test failure crashes the pipeline — the report is never exported.
 > `ReturnType.ANY` lets the pipeline continue even when tests fail
@@ -130,21 +62,7 @@ Show that the pipeline crashes — no report exported:
 rm -rf ./build/test-results && dagger --progress dots -m dagger-kotlin call test --source ./kotlin-app export --path ./build/test-results
 ```
 
-The `TestResult` class is already in the file — now **update `test()` to use it**
-in `dagger-kotlin/src/dagger_kotlin/main.py`:
-
-```python
-@function
-async def test(self, source: ...) -> TestResult:
-    """Run the test suite — never raises, always returns results."""
-    container = self._gradle(source).with_exec(
-        ["./gradlew", "test", "--build-cache", "--project-cache-dir", "/app/build-cache"],
-        expect=dagger.ReturnType.ANY,
-    )
-    exit_code = await container.exit_code()
-
-    return TestResult(_container=container, _exit_code=exit_code)
-```
+Comment the current test method, and uncomment the other one to switch to `TestResult`
 
 Now we need two things: export the report **and** propagate the exit code.
 Doing this with two separate `dagger call` invocations means two engine connections:
@@ -174,30 +92,16 @@ Key points to explain:
 
 ---
 
-## Step 5 — Wrap in a mise task
+## Step 4 — Wrap in a mise task
 
 > **Concept**: The Dagger command is powerful but verbose.
 > `mise` acts as the developer-facing interface — nobody needs to know Dagger internals.
 > The same command works locally and in GitHub Actions unchanged.
 
-Fill in `.mise/tasks/ci/test` (same Dagger Shell command, now behind a simple `mise run`):
-
-```bash
-#!/usr/bin/env bash
-#MISE description="Run the kotlin-app test suite via Dagger"
-set -euo pipefail
-
-dagger --progress dots -m ./dagger-kotlin --command '
-  test_results=$( . | test --source=../kotlin-app )
-  $test_results | result | export --path=./build/test-results
-  .exit $( $test_results | exit-code )
-'
-```
-
 Run it:
 
 ```bash
-mise run ci:test
+mise run kotlin:ci:test
 
 ls build/test-results/
 ```

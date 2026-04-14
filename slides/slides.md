@@ -29,6 +29,29 @@ class: cover-slide
 </div>
 
 ---
+hideInToc: true
+---
+
+# Dagger @Betclic
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-value">~60</div>
+    <div class="stat-label">pipelines / min</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">~400</div>
+    <div class="stat-label">développeurs</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">5</div>
+    <div class="stat-label">langages</div>
+  </div>
+</div>
+
+> Migration **Jenkins → GitHub Actions** en cours — Dagger au cœur du Golden Path
+
+---
 title: About Vivien
 layout: about-me
 hideInToc: true
@@ -66,54 +89,35 @@ speakerCompanyLogo: /images/betclic-logo.svg
 </template>
 
 ---
-layout: section
----
 
-# Contexte
-
-## Ce qu'on a fait chez Betclic
-
----
-
-# Le Golden Path chez Betclic
+# Pourquoi Dagger ?
 
 <div class="two-col">
 <div>
 
-### Avant Dagger
+### Le problème 😤
 
 - Scripts shell partout 🍝
-- Pipelines YAML copiés-collés entre les équipes
-- Environnements locaux différents de la CI
-- Onboarding long et douloureux
+- YAML copié-collé entre équipes
+- Local ≠ CI → *"works on my machine"*
+- Onboarding long, docs obsolètes
 
 </div>
 <div>
 
-### La vision Golden Path
+### Notre réponse ✅
 
-- Un seul endroit pour définir les pipelines
-- **Reproductible** en local et en CI
-- **Partageable** entre équipes via des modules
+- **Un seul endroit** pour les pipelines
+- **Reproductible** : local = CI = partout
+- **Modulaire** : partagé comme un package
 - **Testable** comme du vrai code
 
 </div>
 </div>
 
----
-
-# Pourquoi Dagger ?
-
-<div class="highlight-box">
-  <strong>Dagger</strong> — un moteur de CI/CD programmable basé sur des conteneurs, créé par le fondateur de Docker.
+<div class="highlight-box" style="margin-top: 1.5rem;">
+  <strong>Dagger</strong> — pipelines as code, portables, conteneurisés. Créé par le fondateur de Docker.
 </div>
-
-<br/>
-
-- **Pipeline as Code** : Go, Python, TypeScript... votre langage, vos règles
-- **Portable** : tourne en local, sur GitHub Actions, GitLab CI, etc.
-- **Modulaire** : partagez des modules comme des packages
-- **Caching** natif : perfs accrues
 
 ---
 layout: default
@@ -323,41 +327,6 @@ layout: default
 
 ---
 
-# Montage des volumes — Pourquoi & Comment ?
-
-<div class="highlight-box">
-  Dagger exécute chaque step dans des conteneurs <strong>éphémères</strong>.<br/>
-  Sans cache monté : les dépendances sont <strong>re-téléchargées à chaque run</strong>.
-</div>
-
-<br/>
-
-<div class="two-col">
-<div>
-
-### ❌ Sans `with_mounted_cache`
-
-| Run | Durée | Pourquoi |
-|-----|-------|----------|
-| #1 | ~8 min | Télécharge 400Mo de deps |
-| #2 | ~8 min | Re-télécharge tout |
-| #3 | ~8 min | Et encore... |
-
-</div>
-<div>
-
-### ✅ Avec `with_mounted_cache`
-
-| Run | Durée | Pourquoi |
-|-----|-------|----------|
-| #1 | ~8 min | Premier run, mise en cache |
-| #2 | ~2 min | Cache hit ✓ |
-| #3 | ~2 min | Cache hit ✓ |
-
-</div>
-</div>
-
----
 
 # `CacheSharingMode` — accès concurrent au cache
 
@@ -430,70 +399,6 @@ layout: default
     </div>
     <div class="tl-axis"><span>0s</span><span>3s</span><span>5s</span></div>
     <div class="tl-panel-verdict">✅ Rapide & isolé</div>
-  </div>
-
-</div>
-
----
-layout: section
----
-
-# TestContainers
-
-## Tester comme en production
-
-
----
-
-# TestContainers avec Dagger
-
-<div class="tc-arch-grid">
-
-  <div class="tc-arch-col">
-    <div class="tc-arch-label v1">V1 — Module daggerverse</div>
-    <div class="tc-arch-diagram v1">
-      <div class="tc-arch-box tc-arch-cli">🖥️ Dagger CLI</div>
-      <div class="tc-arch-connector">↓</div>
-      <div class="tc-arch-box tc-arch-engine">
-        ⚙️ Dagger Engine
-        <div class="tc-arch-engine-inner">
-          <div class="tc-arch-dind">
-            <div class="tc-arch-dind-title">🐳 Docker DinD (service)</div>
-            <div class="tc-arch-containers">
-              <span class="tc-arch-container">mongo</span>
-              <span class="tc-arch-container">localstack</span>
-              <span class="tc-arch-container">postgres</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-click="1" class="tc-arch-problem-note">
-      ⚠️ Docker redémarre à chaque run → <strong>images non cachées</strong><br/>
-      Tests parallèles → <strong>N pulls simultanés</strong> → saturation IOP
-    </div>
-  </div>
-
-  <div v-click="2" class="tc-arch-col">
-    <div class="tc-arch-label v2">V2 — Notre module custom</div>
-    <div class="tc-arch-diagram v2">
-      <div class="tc-arch-box tc-arch-cli">🖥️ Dagger CLI</div>
-      <div class="tc-arch-connector">↓</div>
-      <div class="tc-arch-box tc-arch-engine">⚙️ Dagger Engine</div>
-      <div class="tc-arch-connector">↓</div>
-      <div class="tc-arch-box tc-arch-external">
-        🐳 Docker Host externe
-        <div class="tc-arch-containers" style="margin-top:6px;justify-content:center;">
-          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">mongo</span>
-          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">localstack</span>
-          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">postgres</span>
-        </div>
-      </div>
-    </div>
-    <div class="tc-arch-benefit-note">
-      ✅ Images téléchargées <strong>une seule fois</strong> — cache Docker persistant<br/>
-      🔀 En local → TCP daemon · Fallback → DinD service
-    </div>
   </div>
 
 </div>
@@ -632,7 +537,7 @@ dagger -m ./dagger-kotlin --command '
   <div v-click="1" class="sl-after-code">
 
 ```bash
-mise run dotnet:ci:test
+mise run kotlin:ci:test
 ```
 
   </div>
@@ -660,7 +565,7 @@ layout: section
 <div class="streamline-flow">
   <div class="sf-step">
     <div class="sf-icon">👩‍💻</div>
-    <div class="sf-label"><code>mise run dotnet:ci:test</code></div>
+    <div class="sf-label"><code>mise run kotlin:ci:test</code></div>
   </div>
   <div v-click="1" class="sf-arrow">→</div>
   <div v-click="1" class="sf-step sf-highlight">

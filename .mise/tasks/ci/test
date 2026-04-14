@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-#MISE description="Run the kotlin-app test suite via Dagger"
-set -euo pipefail
-
-# TODO: fill in during the demo (Step 6)
