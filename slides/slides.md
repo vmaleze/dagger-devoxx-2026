@@ -49,7 +49,9 @@ hideInToc: true
   </div>
 </div>
 
-> Migration **Jenkins → GitHub Actions** en cours — Dagger au cœur du Golden Path
+<div v-click class="highlight-box" style="margin-top: 1.5rem; text-align: center;">
+  Comment on y est arrivé chez Betclic ? C'est ce qu'on va vous expliquer. 👉
+</div>
 
 ---
 title: About Vivien
@@ -399,6 +401,70 @@ layout: default
     </div>
     <div class="tl-axis"><span>0s</span><span>3s</span><span>5s</span></div>
     <div class="tl-panel-verdict">✅ Rapide & isolé</div>
+  </div>
+
+</div>
+
+---
+layout: section
+---
+
+# TestContainers
+
+## Tester comme en production
+
+
+---
+
+# TestContainers avec Dagger
+
+<div class="tc-arch-grid">
+
+  <div class="tc-arch-col">
+    <div class="tc-arch-label v1">V1 — Module daggerverse</div>
+    <div class="tc-arch-diagram v1">
+      <div class="tc-arch-box tc-arch-cli">🖥️ Dagger CLI</div>
+      <div class="tc-arch-connector">↓</div>
+      <div class="tc-arch-box tc-arch-engine">
+        ⚙️ Dagger Engine
+        <div class="tc-arch-engine-inner">
+          <div class="tc-arch-dind">
+            <div class="tc-arch-dind-title">🐳 Docker DinD (service)</div>
+            <div class="tc-arch-containers">
+              <span class="tc-arch-container">mongo</span>
+              <span class="tc-arch-container">localstack</span>
+              <span class="tc-arch-container">postgres</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-click="1" class="tc-arch-problem-note">
+      ⚠️ Docker redémarre à chaque run → <strong>images non cachées</strong><br/>
+      Tests parallèles → <strong>N pulls simultanés</strong> → saturation IOP
+    </div>
+  </div>
+
+  <div v-click="2" class="tc-arch-col">
+    <div class="tc-arch-label v2">V2 — Notre module custom</div>
+    <div class="tc-arch-diagram v2">
+      <div class="tc-arch-box tc-arch-cli">🖥️ Dagger CLI</div>
+      <div class="tc-arch-connector">↓</div>
+      <div class="tc-arch-box tc-arch-engine">⚙️ Dagger Engine</div>
+      <div class="tc-arch-connector">↓</div>
+      <div class="tc-arch-box tc-arch-external">
+        🐳 Docker Host externe
+        <div class="tc-arch-containers" style="margin-top:6px;justify-content:center;">
+          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">mongo</span>
+          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">localstack</span>
+          <span class="tc-arch-container" style="background:rgba(0,0,0,0.08);">postgres</span>
+        </div>
+      </div>
+    </div>
+    <div class="tc-arch-benefit-note">
+      ✅ Images téléchargées <strong>une seule fois</strong> — cache Docker persistant<br/>
+      🔀 En local → TCP daemon · Fallback → DinD service
+    </div>
   </div>
 
 </div>

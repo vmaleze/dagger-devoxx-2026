@@ -89,7 +89,6 @@ class DaggerKotlin:
     #         expect=dagger.ReturnType.ANY,
     #     )
     #     exit_code = await container.exit_code()
-
     #     return TestResult(_container=container, _exit_code=exit_code)
 
     @function
