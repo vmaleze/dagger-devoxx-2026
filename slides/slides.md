@@ -282,7 +282,7 @@ layout: section
 </div>
 
 <div v-click class="module-transverse">
-  <div class="mt-card">🐳 <strong>Docker Build</strong> — construction & publication d'images</div>
+  <div class="mt-card">🐳 <strong>Docker</strong> — construction & publication d'images</div>
   <div class="mt-card">🏷️ <strong>Versioning</strong> — gestion sémantique des versions</div>
 </div>
 
