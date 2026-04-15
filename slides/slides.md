@@ -83,9 +83,12 @@ speakerCompanyLogo: /images/betclic-logo.svg
 ---
 
 <template #details>
-  <li>🏢 Staff Engineer — DevX chez Betclic depuis 2 ans</li>
-  <li><logos-github-actions /> Mise en place de la plateforme CI/CD GitHub Actions + Dagger</li>
-  <li>📊 Déploiement des métriques DORA</li>
+  <li>🏢 Staff Engineer — DevX chez Betclic depuis 2 ans
+    <ul style="margin-top:4px;padding-left:1.2em;">
+      <li><logos-github-actions /> Mise en place de la plateforme CI/CD GitHub Actions + Dagger</li>
+      <li>📊 Déploiement des métriques DORA</li>
+    </ul>
+  </li>
   <li><img src="/images/dagger.png" style="display:inline;height:1.2em;vertical-align:middle;margin-right:0.3em;" /> Adopteur de Dagger de la première heure</li>
   <li><logos-linkedin-icon /> garcia-de-oliveira-rodrigo</li>
 </template>
