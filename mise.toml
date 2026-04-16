@@ -1,6 +1,6 @@
 [tools]
 java = "25.0.2"
-dagger = "0.20.5"
+dagger = "0.20.6"
 
 [task_config]
 includes = [
