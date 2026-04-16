@@ -1703,3 +1703,59 @@
 .rt-row.rt-early   { border-left: 3px solid #A855F7; background: #FAF5FF; }
 .rt-row.rt-domain  { border-left: 3px solid #3B82F6; background: #EFF6FF; }
 .rt-row.rt-stable  { border-left: 3px solid #16A34A; background: #F0FDF4; }
+
+/* ============================================================
+   TEST REPORT — DX COMPARE SLIDE
+   ============================================================ */
+.dx-compare {
+  margin-top: 0.5rem;
+}
+
+.dx-compare h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.test-report-preview {
+  border: 2px solid #16A34A;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.test-report-preview img {
+  width: 100%;
+  display: block;
+}
+
+.logs-degraded {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.logs-box {
+  background: #1E1E1E;
+  color: #D4D4D4;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.7rem;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  line-height: 1.6;
+  border: 2px solid #EF4444;
+}
+
+.logs-line { display: block; }
+.logs-fail { color: #F87171; font-weight: 700; }
+.logs-indent { padding-left: 1.5em; color: #FCA5A5; }
+.logs-dim { color: #6B7280; font-style: italic; }
+
+.logs-pain {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.82rem;
+  color: #991B1B;
+  line-height: 1.7;
+}

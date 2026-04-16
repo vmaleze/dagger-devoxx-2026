@@ -483,6 +483,45 @@ layout: section
 
 ---
 
+# Rapport de tests — L'expérience développeur
+
+<div class="two-col dx-compare" style="gap:1.5rem;align-items:start">
+<div class="dx-good">
+
+### ✅ Avec rapport publié
+
+<div class="test-report-preview">
+  <img src="/images/test-report-ci-cropped.png" />
+</div>
+
+</div>
+<div v-click class="dx-bad">
+
+### ❌ Sans rapport
+
+<div class="logs-degraded">
+  <div class="logs-box">
+    <div class="logs-line logs-fail">Task :test FAILED</div>
+    <div class="logs-line">&nbsp;</div>
+    <div class="logs-line">FailingTest myTest FAILED</div>
+    <div class="logs-line logs-indent">java.lang.AssertionError</div>
+    <div class="logs-line">&nbsp;</div>
+    <div class="logs-line logs-dim">... 1 800 lignes de logs ...</div>
+    <div class="logs-line">&nbsp;</div>
+    <div class="logs-line logs-fail">BUILD FAILED in 1m 42s</div>
+  </div>
+  <div class="logs-pain">
+    😵 1 800 lignes à parcourir<br/>
+    🔍 Test en échec difficile à trouver<br/>
+    📉 DX dégradée
+  </div>
+</div>
+
+</div>
+</div>
+
+---
+
 # Rapport de tests — Le problème
 
 <div class="highlight-box">
