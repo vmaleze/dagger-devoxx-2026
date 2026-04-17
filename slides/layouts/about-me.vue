@@ -57,7 +57,7 @@ const resolvedLogo = base + props.speakerCompanyLogo
 .about-me .bio h1 {
   font-size: 2.8rem;
   font-weight: 900;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   line-height: 1.1;
   margin: 0;
   white-space: nowrap;
@@ -88,7 +88,7 @@ const resolvedLogo = base + props.speakerCompanyLogo
 
 .about-me .details ul li {
   font-size: 1rem;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   line-height: 1.4;
   padding: 0;
 }
@@ -109,6 +109,6 @@ const resolvedLogo = base + props.speakerCompanyLogo
 }
 
 .about-me .details ul ul li::marker {
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
 }
 </style>

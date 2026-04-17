@@ -1,1 +1,0 @@
-Montrer les résultats des tests xml (ajouter une slide)

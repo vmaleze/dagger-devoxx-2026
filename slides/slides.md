@@ -37,7 +37,7 @@ hideInToc: true
 <div class="stats-row">
   <div class="stat-card">
     <div class="stat-value">~60</div>
-    <div class="stat-label">pipelines / min</div>
+    <div class="stat-label">runners / min</div>
   </div>
   <div class="stat-card">
     <div class="stat-value">~400</div>
@@ -104,6 +104,7 @@ speakerCompanyLogo: /images/betclic-logo.svg
 
 - Scripts shell partout 🍝
 - YAML copié-collé entre équipes
+- Pipeline lent
 - Local ≠ CI → *"works on my machine"*
 - Onboarding long, docs obsolètes
 
@@ -112,6 +113,7 @@ speakerCompanyLogo: /images/betclic-logo.svg
 
 ### Notre réponse ✅
 
+- **Une performance accrue**
 - **Un seul endroit** pour les pipelines
 - **Reproductible** : local = CI = partout
 - **Modulaire** : partagé comme un package

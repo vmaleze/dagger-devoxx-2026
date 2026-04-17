@@ -1,25 +1,26 @@
 /* ============================================================
    Betclic Theme for Slidev
-   Brand colors: Magma Red #E10014, Yellow #FFCC00, White #FFFFFF
+   Brand colors: Magma Red #E10014, Yellow #FFCC00, Black #000000, White #FFFFFF
+   Reference: https://brand.betclic.com/#colours
    ============================================================ */
 
 /* ---- Fonts ---- */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=swap');
 
 :root {
+  /* Brand colors — https://brand.betclic.com/#colours */
   --betclic-red: #E10014;
-  --betclic-red-dark: #B40010;
-  --betclic-red-light: #FF2032;
   --betclic-yellow: #FFCC00;
   --betclic-black: #000000;
-  --betclic-dark: #1A1A1A;
-  --betclic-gray: #6B7280;
-  --betclic-light-gray: #F3F4F6;
   --betclic-white: #FFFFFF;
+
+  /* Functional UI colors (not brand colors) */
+  --ui-gray: #6B7280;
+  --ui-light-gray: #F3F4F6;
 
   --slidev-theme-primary: var(--betclic-red);
   --slidev-theme-background: var(--betclic-white);
-  --slidev-theme-foreground: var(--betclic-dark);
+  --slidev-theme-foreground: var(--betclic-black);
   --slidev-font-sans: 'Roboto', system-ui, -apple-system, sans-serif;
 }
 
@@ -27,7 +28,7 @@
 .slidev-layout {
   font-family: var(--slidev-font-sans);
   background: var(--betclic-white);
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
 }
 
 /* ============================================================
@@ -85,7 +86,7 @@
   font-size: 3.8rem !important;
   font-weight: 900 !important;
   line-height: 1.05 !important;
-  color: var(--betclic-dark) !important;
+  color: var(--betclic-black) !important;
   margin: 0 !important;
   letter-spacing: -0.02em;
 }
@@ -93,7 +94,7 @@
 .cover-subtitle {
   font-size: 1.4rem !important;
   font-weight: 400 !important;
-  color: var(--betclic-gray) !important;
+  color: var(--ui-gray) !important;
   margin: 0 !important;
   margin-top: 4px !important;
 }
@@ -104,7 +105,7 @@
   gap: 12px;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   margin-top: 8px;
 }
 
@@ -127,7 +128,7 @@
 .slidev-layout.two-cols h1 {
   font-size: 2rem;
   font-weight: 800;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   border-bottom: 3px solid var(--betclic-red);
   padding-bottom: 10px;
   margin-bottom: 24px;
@@ -143,7 +144,7 @@
 .slidev-layout h3 {
   font-size: 1rem;
   font-weight: 700;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   margin-bottom: 8px;
 }
 
@@ -204,7 +205,7 @@
   display: inline-block;
   margin-top: 20px;
   background: var(--betclic-yellow);
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   font-weight: 700;
   font-size: 0.85rem;
   padding: 4px 14px;
@@ -231,7 +232,7 @@
   left: 0;
   right: 0;
   height: 5px;
-  background: linear-gradient(90deg, var(--betclic-red) 60%, var(--betclic-yellow) 100%);
+  background: var(--betclic-red);
   z-index: 20;
 }
 
@@ -318,7 +319,7 @@
 .arch-v2-rname {
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
 }
 
 .arch-v2-rtag {
@@ -361,12 +362,12 @@
   margin-top: 12px;
   font-size: 0.84rem;
   font-weight: 700;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   display: inline-block;
 }
 
 .arch-key-points {
-  background: var(--betclic-light-gray);
+  background: var(--ui-light-gray);
   border-left: 4px solid var(--betclic-red);
   border-radius: 0 8px 8px 0;
   padding: 20px 20px;
@@ -375,7 +376,7 @@
   gap: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   line-height: 1.3;
 }
 
@@ -389,7 +390,7 @@
 
 /* Highlight box */
 .highlight-box {
-  background: var(--betclic-light-gray);
+  background: var(--ui-light-gray);
   border-left: 4px solid var(--betclic-red);
   padding: 16px 20px;
   border-radius: 0 8px 8px 0;
@@ -430,12 +431,12 @@
 .pf-title {
   font-size: 1rem;
   font-weight: 800;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
 }
 
 .pf-desc {
   font-size: 0.82rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   line-height: 1.4;
 }
 
@@ -478,14 +479,14 @@
 .end-cta {
   margin: 24px auto;
   font-size: 1.2rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
 }
 
 .social-links {
   margin-top: 12px;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
 }
 
 .end-logo {
@@ -508,11 +509,11 @@
   background: #F8F9FA !important;
   border-radius: 8px;
   border-left: 3px solid var(--betclic-red);
-  color: var(--betclic-dark) !important;
+  color: var(--betclic-black) !important;
 }
 
 .slidev-layout pre code {
-  color: var(--betclic-dark) !important;
+  color: var(--betclic-black) !important;
   background: transparent !important;
   font-size: 0.88rem !important;
   line-height: 1.55 !important;
@@ -529,10 +530,10 @@
 /* Blockquote — placeholder style */
 .slidev-layout blockquote {
   border-left: 4px solid var(--betclic-yellow);
-  background: var(--betclic-light-gray);
+  background: var(--ui-light-gray);
   padding: 16px 20px;
   border-radius: 0 8px 8px 0;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   font-style: italic;
   margin: 24px 0;
 }
@@ -603,7 +604,7 @@
 
 .cache-row {
   font-size: 0.88rem;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   padding: 5px 10px;
   border-radius: 6px;
   background: rgba(255,255,255,0.7);
@@ -617,7 +618,7 @@
 .cache-col-note {
   margin-top: auto;
   font-size: 0.84rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   border-top: 1px dashed #D1D5DB;
   padding-top: 8px;
 }
@@ -627,7 +628,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   font-weight: 300;
 }
 
@@ -640,7 +641,7 @@
 }
 
 .sharing-mode-table th {
-  background: var(--betclic-dark);
+  background: var(--betclic-black);
   color: var(--betclic-white);
   padding: 6px 10px;
   text-align: left;
@@ -823,7 +824,7 @@
 
 .sharing-card-desc {
   font-size: 0.78rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   line-height: 1.4;
 }
 
@@ -984,7 +985,7 @@
 }
 
 .cache-safety-table thead tr {
-  background: var(--betclic-dark);
+  background: var(--betclic-black);
   color: var(--betclic-white);
 }
 
@@ -1085,7 +1086,7 @@
 .mc-name {
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
 }
 
 .mc-caps {
@@ -1131,7 +1132,7 @@
   padding: 10px 0;
   border-top: 1px solid #E5E7EB;
   font-size: 0.83rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   font-weight: 600;
 }
 
@@ -1166,7 +1167,7 @@
 .stat-label {
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -1205,7 +1206,7 @@
   margin-bottom: 4px;
 }
 
-.context-panel.problem .context-panel-header { color: #B40010; }
+.context-panel.problem .context-panel-header { color: var(--betclic-red); }
 .context-panel.solution .context-panel-header { color: #15803D; }
 
 .context-panel ul {
@@ -1274,13 +1275,13 @@
 }
 
 .tc-v1 .tc-badge     { color: #475569; }
-.tc-problem .tc-badge { color: #B40010; }
+.tc-problem .tc-badge { color: var(--betclic-red); }
 .tc-v2 .tc-badge     { color: #15803D; }
 
 .tc-panel-title {
   font-size: 0.85rem;
   font-weight: 800;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   margin-bottom: 2px;
 }
 
@@ -1561,7 +1562,7 @@
   font-weight: 800;
   padding: 8px 16px;
   background: #E5E7EB;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   letter-spacing: 0.02em;
 }
 
@@ -1628,7 +1629,7 @@
 
 .sf-label {
   font-size: 0.82rem;
-  color: var(--betclic-dark);
+  color: var(--betclic-black);
   line-height: 1.4;
 }
 
@@ -1642,7 +1643,7 @@
 .sf-label small {
   display: block;
   font-size: 0.72rem;
-  color: var(--betclic-gray);
+  color: var(--ui-gray);
   margin-top: 2px;
 }
 
