@@ -181,28 +181,28 @@ layout: default
 # Nos problèmes — Passer à l'échelle
 
 <div class="problems-flow">
-  <div class="pf-item">
+  <div v-click="1" class="pf-item">
     <div class="pf-num">01</div>
     <div class="pf-icon">💣</div>
     <div class="pf-title">Explosion des modules</div>
     <div class="pf-desc">Dizaines de modules sans convention ni gouvernance</div>
   </div>
-  <div v-click="1" class="pf-arrow">→</div>
-  <div v-click="1" class="pf-item">
+  <div v-click="2" class="pf-arrow">→</div>
+  <div v-click="2" class="pf-item">
     <div class="pf-num">02</div>
     <div class="pf-icon">🐢</div>
     <div class="pf-title">Performances</div>
     <div class="pf-desc">Caches mal gérés, montages de volumes, pipelines lents</div>
   </div>
-  <div v-click="2" class="pf-arrow">→</div>
-  <div v-click="2" class="pf-item">
+  <div v-click="3" class="pf-arrow">→</div>
+  <div v-click="3" class="pf-item">
     <div class="pf-num">03</div>
     <div class="pf-icon">😵</div>
     <div class="pf-title">DX dégradée</div>
     <div class="pf-desc">Commandes à rallonge, rapports inexploitables</div>
   </div>
-  <div v-click="3" class="pf-arrow">→</div>
-  <div v-click="3" class="pf-item">
+  <div v-click="4" class="pf-arrow">→</div>
+  <div v-click="4" class="pf-item">
     <div class="pf-num">04</div>
     <div class="pf-icon">🔒</div>
     <div class="pf-title">Streamlining</div>
