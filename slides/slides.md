@@ -444,7 +444,7 @@ layout: section
     </div>
     <div v-click="1" class="tc-arch-problem-note">
       ⚠️ Docker redémarre à chaque run → <strong>images non cachées</strong><br/>
-      Tests parallèles → <strong>N pulls simultanés</strong> → saturation IOP
+      Tests parallèles → <strong>N pulls simultanés</strong> → saturation I/O
     </div>
   </div>
 
