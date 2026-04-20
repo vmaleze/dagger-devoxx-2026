@@ -54,11 +54,11 @@ class DaggerKotlin:
         return (
             dag.container()
             .from_(JDK_IMAGE)
-            .with_mounted_cache(
-                "/root/.gradle",
-                dag.cache_volume("gradle-cache"),
-                sharing=CacheSharingMode.PRIVATE,  # isolated per pipeline
-            )
+            # .with_mounted_cache(
+            #     "/root/.gradle",
+            #     dag.cache_volume("gradle-cache"),
+            #     sharing=CacheSharingMode.PRIVATE,  # isolated per pipeline
+            # )
             .with_workdir("/app")
             .with_directory("/app", source)
         )
