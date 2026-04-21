@@ -79,7 +79,7 @@ class DaggerKotlin:
     # ) -> TestResult:
     #     """Run the test suite — never raises, always returns results."""
     #     container = self._gradle(source).with_exec(
-    #         ["./gradlew", "test", "--build-cache"],
+    #         ["./gradlew", "test"],
     #         expect=dagger.ReturnType.ANY,
     #     )
     #     exit_code = await container.exit_code()
