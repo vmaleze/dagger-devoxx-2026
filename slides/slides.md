@@ -680,7 +680,7 @@ layout: section
   <div v-click="1" class="sf-arrow">→</div>
   <div v-click="1" class="sf-step sf-highlight">
     <div class="sf-icon">🔍</div>
-    <div class="sf-label"><strong>betclic-action-tools-version</strong><br/><small>résout les versions pour le domaine</small></div>
+    <div class="sf-label"><strong>get-tools-version</strong><br/><small>résout les versions pour le domaine</small></div>
   </div>
   <div v-click="2" class="sf-arrow">→</div>
   <div v-click="2" class="sf-step">
@@ -696,7 +696,7 @@ layout: section
 
 <div v-click="4" class="streamline-note">
   Aucune env var à gérer, aucune version à pinner manuellement.<br/>
-  <strong>betclic-action-tools-version</strong> est embarqué dans chaque tâche mise — invisible pour le développeur.
+  <strong>get-tools-version</strong> est embarqué dans chaque tâche mise — invisible pour le développeur.
 </div>
 
 ---
