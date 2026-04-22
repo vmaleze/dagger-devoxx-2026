@@ -763,4 +763,7 @@ class: text-center
   </div>
 </div>
 
-<img src="/images/betclic-logo.svg" class="end-logo" />
+<div class="end-qr">
+  <img src="/images/qr-github.svg" class="qr-code" />
+  <span class="qr-label">github.com/vmaleze/dagger-devoxx-2026</span>
+</div>

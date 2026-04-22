@@ -489,12 +489,26 @@
   color: var(--betclic-black);
 }
 
-.end-logo {
-  width: 100px;
-  margin: 24px auto 0;
+.end-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin: 20px auto 0;
+}
+
+.qr-code {
+  width: 180px;
+  height: 180px;
   display: block;
   box-shadow: none !important;
-  border-radius: 0 !important;
+  border-radius: 4px !important;
+}
+
+.qr-label {
+  font-size: 0.62rem;
+  color: var(--ui-gray);
+  font-family: var(--slidev-font-sans);
 }
 
 /* ============================================================
